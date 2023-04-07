@@ -96,3 +96,19 @@ writeFile API 中 options 参数（读取也可以传 options）
 event 模块
 
 stream，http 基于 event，request 监听文件时，是以流来一段一段传输的，
+
+基本使用：
+
+编写 01_....js 文件
+
+编写 02_....js 文件
+
+编写 03_....js 文件
+
+---
+
+event 常用方法。
+
+编写 04_....js 文件
+
+编写 05_....js 文件
