@@ -6,17 +6,17 @@
 
 # 二、Node.js 是什么？
 
-官方对 Node.js 的定义： 一个基于 V8 JavaScript 引擎的 JavaScript 运行时环境。
+官方对 Node.js 的定义： 一个基于 V8 引擎的 JavaScript 运行时环境。
 
-Node.js 基于 V8 引擎执行 JavaScript 代码，但 Node.js 不仅仅只有 V8 引擎：
+Node.js 基于 V8 引擎，执行 JavaScript 代码，但 Node.js 不仅仅只有 V8 引擎：
 
 - 我们已知 V8 可以嵌入到任何 C++ 应用程序中；
-- 无论是 Chrome 还是 Node.js，事实上都是嵌入了 V8 引擎来执行 JavaScript 代码；
-- 事实上，在 Chrome 浏览器中，
-  - 还有解析、渲染 HTML、CSS 等相关渲染引擎
+- 无论是 Chrome 还是 Node.js，都是嵌入了 V8 引擎来执行 JavaScript 代码；
+- 事实上，在 Chrome 浏览器中：
+  - 还有解析、渲染 HTML、CSS 等相关渲染引擎；
   - 还有支持浏览器操作的 API；
   - 还有浏览器自己的事件循环等；
-- 事实上，在 Node.js 中：也提供了后台系统层面的 API
+- 事实上，在 Node.js 中：也提供了系统层面的 API：
   - 比如文件系统读/写、网络 IO、加密、压缩解压文件等操作；
 
 # 三、浏览器对比 Node.js
@@ -29,7 +29,7 @@ Node.js 基于 V8 引擎执行 JavaScript 代码，但 Node.js 不仅仅只有 V
 
 在 Node 中，编写的 JavaScript 代码会：
 
-- 会经过经过 V8 引擎编译执行；
+- 经过 V8 引擎编译执行；
 - 再通过 Node.js 的 Bindings；
 - 将任务放到 Libuv 的事件循环中；
 
@@ -47,18 +47,18 @@ fs 是 **File System** 的缩写，表示文件系统。
 
 对于任何一个，为服务器端服务的语言或者框架，通常都会有自己的文件系统：
 
-- 服务器需要将各种数据、文件等放置到不同的地方；
+服务器需要将各种数据、文件等，放置到不同的地方；
+
 - 比如用户数据可能大多数是放到数据库中的；
-- 比如某些配置文件，或者用户资源（图片、音视频），都是以文件的形式存在于操作系统上的；
+- 比如某些配置文件，或者静态资源（图片、音视频），都是以文件的形式存在于操作系统上的；
 
 Node 也有自己的文件系统操作模块，就是 fs：
 
 - Node 是**跨平台**的，借助于其中封装的文件系统，在任何的操作系统（window、Mac OS、Linux）上，可直接去操作文件；
-- 这是 Node 可以开发服务器的一大原因，也是它可以成为前端自动化脚本等热门工具的原因；
+- 这是 Node 可以开发服务器的一大原因，也是它可以成为前端自动化脚本热门工具的原因；
 
-> 【注意】：”数据“不一定要存储在数据库中，存储在 .txt 文本文件中也是不是不行；
+> 【注意】：”数据“不一定要存储在数据库中，存储在“.txt”文本文件中，也是不是不行；只不过，存储在数据库中，读写效率更高。
 >
-> 只不过，存储在数据库中，数据库读写效率更高。
 
 ## 1.文件读取
 
@@ -74,7 +74,7 @@ Node 文件系统 fs 的 API 非常的多：详见[官方文档](https://nodejs.
   - 代码不会被阻塞，通过 `fs.promises` 调用方法操作，会返回一个 Promise；
   - 可以通过 `then`、`catch` 进行处理；
 
-方式三，方式二本质上一样，都是异步处理，方式三使用 Promise 相对现代化。
+方式三，方式二，本质上一样，都是异步处理，方式三使用 Promise 更加现代化。
 
 :egg:案例理解：
 
@@ -104,7 +104,7 @@ console.log('res2:', res2)
 
 > 【注意】：文件读取时，如果不填写 `encoding`，返回的结果是 Buffer；
 
-异步读取方式，回调函数形式。处理错误。
+异步读取方式（回调函数形式），处理错误的情况。
 
 `fs.readFile(path[, options], callback)`
 
@@ -167,13 +167,17 @@ fs.promises
 
 在系统层面，所有文件系统操作，都使用这些文件描述符，来标识和跟踪每个文件。
 
-- Windows 系统使用了一个虽然不同但概念上类似的机制来跟踪资源。
+- Windows 系统使用了一个虽然不同但概念上类似的机制来跟踪资源（Node 已屏蔽）。
 
 为了简化用户的工作，Node.js 抽象出操作系统之间的特定差异，并为所有打开的文件，分配一个数字型的文件描述符。
 
-`fs.open()` 方法用于分配新的文件描述符。
+`fs.open()` 方法用于分配新的文件描述符。一旦被分配，文件描述符可用于：
 
-- 一旦被分配，文件描述符可用于从文件读取数据、向文件写入数据、或请求关于文件的信息。
+- 从文件读取数据；
+- 向文件写入数据、
+- 或请求关于文件的信息。
+
+:egg:案例理解：
 
 01-Node 模块-fs\02-fs 文件描述符.js
 
@@ -204,7 +208,7 @@ fs.open('./bbb.txt', (err, fd) => {
 })
 ```
 
-> 真实开发中使用 Promise。演示示例时，用回调方式更方便，
+> 真实开发中使用 Promise。演示示例时，用的是回调方式，
 
 以上是读取文件比较完整的过程。
 
@@ -218,28 +222,21 @@ fs.open('./bbb.txt', (err, fd) => {
 
 `fs.writeFile(file, data[, options], callback)`，在文件中写入内容。
 
-`options` 参数（读取也可以传 options）有以下属性：
+`options` 参数（文件读取也可以传）有以下属性：
 
 - `flag` 写入的方式。
 - `encoding` 字符编码。
-
-我们先来看 flag：
 
 ### 1.flag 选项
 
 `flag` 的值有很多，详见[官方文档](https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_file_system_flags)
 
-`w` 打开文件写入，默认值；
-
-`w+` 打开文件进行读写（可读可写），如果不存在则创建文件；
-
-`r` 打开文件读取，读取文件时的默认值；
-
-`r+` 打开文件进行读写，如果不存在那么抛出异常；
-
-`a` append 缩写，表示打开要写入的文件，将流放在文件末尾。如果不存在则创建文件；
-
-`a+` 打开文件以进行读写（可读可写），将流放在文件末尾。如果不存在则创建文件。
+- `w` 打开文件写入，默认值；
+- `w+` 打开文件进行读写（可读可写），如果不存在则创建文件；
+- `r` 打开文件读取，读取文件时的默认值；
+- `r+` 打开文件进行读写，如果不存在那么抛出异常；
+- `a` append 缩写，表示打开要写入的文件，将流放在文件末尾。如果不在则创建文件；
+- `a+` 打开文件以进行读写（可读可写），将流放在文件末尾。如果不存在则创建文件。
 
 ### 2.encoding 选项
 
@@ -289,7 +286,7 @@ fs.mkdir('./zzt', err => {
 
 ### 2.读取内容
 
-读取直接子级中的内容
+读取直接子级的内容。
 
 01-Node 模块-fs\05-fs 文件夹内容读取.js
 
@@ -305,7 +302,7 @@ fs.readdir('./zzt', (err, files) => {
 })
 ```
 
-判断直接子级中的内容，是文件夹，还是文件。
+判断直接子级的内容，是文件夹，还是文件。
 
 01-Node 模块-fs\05-fs 文件夹内容读取.js
 
@@ -357,7 +354,7 @@ readDirectoryFile('./zzt')
 
 ### 3.重命名
 
-文件也、文件都可以重命名
+文件夹、文件，都可以重命名。
 
 01-Node 模块-fs\06-fs 文件夹重命名.js
 
@@ -391,9 +388,9 @@ fs.rename('./ccc.txt', './ddd.txt', err => {
 Node 中，很多核心 API，都基于 events 事件驱动；
 
 - 比如 stream，http。
-- 在 http 中，request 监听文件传输时，是以流，来一段一段传输的，
+- 在 http 中，request 监听文件传输时，是以”流“来一段一段传输的，
 
-Node 中，events 异步事件驱动这个体系中：
+Node 中，events 异步事件驱动，这个体系中：
 
 - 发射器（Emitters）发出某一个事件；
 - 监听器（Listeners）监听这个事件，并且传入的回调函数，会在监听到事件时调用；
@@ -431,11 +428,11 @@ setTimeout(() => {
 
 ### 2.其它常见方法
 
-EventEmitter 的实例有一些属性，可通过 API 获取，其中可以记录一些信息：
+EventEmitter 的实例有一些属性，可通过 API 获取；
 
-- `emitter.eventNames()`：返回当前 EventEmitter 对象注册的事件字符串数组；
-- `emitter.getMaxListeners()`：返回当前 EventEmitter 对象的最大监听器数量
-  - 可以通过 `setMaxListeners()` 来修改，默认是 10；
+- `emitter.eventNames()`：返回当前 EventEmitter 对象注册的事件名称（字符串）数组；
+- `emitter.getMaxListeners()`：返回当前 EventEmitter 对象的最大监听器数量。
+  - 可以通过 `setMaxListeners()` 来修改，默认是 `10`；
 - `emitter.listenerCount(事件名称)`：返回当前 EventEmitter 对象某个事件，对应监听器的个数；
 - `emitter.listeners(事件名称)`：返回当前 EventEmitter 对象某个事件,对应监听器数组；
 
@@ -478,10 +475,10 @@ console.log(ee.listeners('zzt'))
 
 EventEmitter 的实例方法补充：
 
-- `emitter.once(eventName, listener)`：事件监听一次
-- `emitter.prependListener()`：将监听事件添加到最前面
-- `emitter.prependOnceListener()`：将监听事件添加到最前面，但是只监听一次
-- `emitter.removeAllListeners([eventName])`：移除所有的监听器
+- `emitter.once(eventName, listener)`：事件监听一次；
+- `emitter.prependListener()`：将监听事件添加到最前面；
+- `emitter.prependOnceListener()`：将监听事件添加到最前面，但是只监听一次；
+- `emitter.removeAllListeners([eventName])`：移除所有的监听器。
 
 :egg:案例理解：
 
