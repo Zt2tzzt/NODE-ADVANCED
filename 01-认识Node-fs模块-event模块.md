@@ -47,7 +47,7 @@ fs 是 **File System** 的缩写，表示文件系统。
 
 对于任何一个，为服务器端服务的语言或者框架，通常都会有自己的文件系统：
 
-服务器需要将各种数据、文件等，放置到不同的地方；
+服务器需要将各种数据、文件，放置到不同的地方；
 
 - 比如用户数据可能大多数是放到数据库中的；
 - 比如某些配置文件，或者静态资源（图片、音视频），都是以文件的形式，存在于操作系统上的；
@@ -136,6 +136,8 @@ console.log('res3 的后续代码执行~')
 
 异步读取方式，Promise 形式。
 
+`fs.promises.readFile`
+
 01-Node 模块-fs\01_fs 文件读取的 api.js
 
 ```js
@@ -162,7 +164,7 @@ fs.promises
 
 > 每一个读取文件的操作，Node 会开启一个进程。
 
-每个打开的文件，都分配了一个称为文件描述符的，简单的数字标识符。
+每个打开的文件，都分配了一个称为文件描述符的，简单的**数字**标识符。
 
 在系统层面，所有文件系统操作，都使用这些文件描述符，来标识和跟踪每个文件。
 
@@ -174,9 +176,9 @@ fs.promises
 
 - 从文件读取数据；
 - 向文件写入数据、
-- 或请求关于文件的信息。
+- 获取文件的信息。
 
-:egg:案例理解：
+:egg: 案例理解：
 
 01-Node 模块-fs\02-fs 文件描述符.js
 
@@ -207,7 +209,7 @@ fs.open('./bbb.txt', (err, fd) => {
 })
 ```
 
-> 真实开发中使用 Promise。演示示例时，用的是回调方式，
+> 真实开发中使用 Promise；演示示例时，用的是回调方式，
 
 以上是读取文件比较完整的过程。
 
@@ -242,7 +244,7 @@ fs.open('./bbb.txt', (err, fd) => {
 
 目前基本用的都是 UTF-8 编码；
 
-:egg:案例理解
+:egg: 案例理解：
 
 01-Node 模块-fs\03-fs 文件写入.js
 
@@ -272,6 +274,8 @@ fs.writeFile(
 
 ### 1.创建
 
+`fs.mkdir`
+
 01-Node 模块-fs\04-fs 文件夹创建.js
 
 ```js
@@ -283,6 +287,8 @@ fs.mkdir('./zzt', err => {
 ```
 
 ### 2.读取内容
+
+`fs.readdir`
 
 读取直接子级的内容。
 
@@ -353,6 +359,8 @@ readDirectoryFile('./zzt')
 ### 3.重命名
 
 文件夹、文件，都可以重命名。
+
+`fs.rename`
 
 01-Node 模块-fs\06-fs 文件夹重命名.js
 
@@ -474,11 +482,11 @@ console.log(ee.listeners('zzt'))
 EventEmitter 的实例方法补充：
 
 - `emitter.once(eventName, listener)`：事件监听一次；
-- `emitter.prependListener()`：将监听事件添加到最前面；
-- `emitter.prependOnceListener()`：将监听事件添加到最前面，但是只监听一次；
+- `emitter.prependListener(eventName, listener)`：将监听事件添加到最前面；
+- `emitter.prependOnceListener(eventName, listener)`：将监听事件添加到最前面，但是只监听一次；
 - `emitter.removeAllListeners([eventName])`：移除所有的监听器。
 
-:egg:案例理解：
+:egg: 案例理解：
 
 02-Node 模块-evnet\03-其它 API（二）.js
 
