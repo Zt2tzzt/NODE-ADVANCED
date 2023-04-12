@@ -54,12 +54,12 @@ const server = new http.Server((req, res) =? {
 
 `server.listen` 方法，用于开启服务器；并且在某一个主机地址的端口上，监听网络请求：
 
-- 也就是说，当通过 [ip]:[port] 的方式发送请求到监听的 Web 服务器上时；就可以对其进行相关的处理了。
+- 也就是说，当通过 [ip]:[port] 的方式，发送请求到监听的 Web 服务器上时；就可以对其进行相关的处理了。
 
 `listen` 方法，有三个参数：
 
 - `port`: 端口，可以不传, 系统会默认分配,（项目中通常会定义一个全局环境变量）；
-- 比如：nginx 服务器，默认监听 `80` 端口。
+  - 比如：nginx 服务器，默认监听 `80` 端口。
 - `host`：主机， 通常不传，默认 `0.0.0.0`:
   - `localhost`：本质上是一个域名，通常情况下会被解析成 `127.0.0.1`；
   - `127.0.0.1`：回环地址（Loop Back Address），表达的意思是“主机自己发出去的包，直接被自己接收”；
@@ -102,7 +102,9 @@ server.listen(8000, () => {
 
 ## 3.创建多个服务
 
-一个主机（云主机）中，可以创建多个服务器，每个服务器监听不同的端口，提供不同的服务。
+一个主机（云主机）中，可以创建多个服务器；
+
+每个服务器监听不同的端口，提供不同的服务。
 
 05-Node 服务器-http\02-http 创建多个服务器.js
 
@@ -185,7 +187,7 @@ nodemon xxx.js
   - 比如客户端信息、接受数据的格式、支持的编码格式等等；
 - 等等。
 
-这些信息，Node 会封装到一个 `request` 的对象中，方便开发者直接处理。
+这些信息，Node 会封装到一个 `request` 的对象中，方便开发者进行处理。
 
 05-Node 服务器-http\03-http 服务器-request 对象.js
 
@@ -218,7 +220,7 @@ const server = http.createServer((req, res) => {
   res.end('hello world aaaa')
 })
 
-// 2.开启server服务器
+// 2.开启 server 服务器
 server.listen(8000, () => {
   console.log('服务器开启成功~')
 })
@@ -265,11 +267,12 @@ server.listen(8000, () => {
 
 比如这个请求地址：`http://localhost:8000/login?name=zzt&password=123`
 
-url 的值是 `/login?name=why&password=123`；其中 query 字符串，处理步骤如下：
+url 的值是 `/login?name=why&password=123`；其中的 query 字符串，处理步骤如下：
 
 1. 取到 query 字符串；
+   - 引入 `url` 模块，使用 `parse` 方法，
 2. 解析 query 字符串；有两种方式。
-   - 方式一：使用 node 提供的 url 模块 `qs`；
+   - 方式一：引入 `qureystring` 模块，使用 `parse` 方法；
    - 方式二：使用 `URLSearchParams` 推荐。
 
 :egg: 案例理解：
@@ -356,13 +359,15 @@ server.listen(8000, () => {
 
 # 八、body 参数的获取
 
+使用 POST 请求传递参数的接口，参数在 body 请求体中。
+
 现有一个创建用户的接口：
 
-请求路径 `url` 为 `/users`；请求方式 `method` 为 `POST`；请求 body 中携带数据 `username`和`password`；
+- 请求路径 `url` 为 `/users`；
+- 请求方式 `method` 为 `POST`；
+- body 体中携带数据 `username`和`password`；
 
-`reuqest` 对象中，没有 body 请求体；
-
-需要通过监听 `reqest` 的 `"data"` 事件获取 body 请求体。
+`reuqest` 对象中，不能直接取到 body 请求体；需要通过监听 `reqest` 的 `"data"` 事件，获取 body 请求体。
 
 > 【注意】：`request` 对象，本质上是一个 readable 可读流。
 
@@ -396,7 +401,7 @@ const server = http.createServer((req, res) => {
   })
 })
 
-// 2.开启server服务器
+// 2.开启 server 服务器
 server.listen(8000, () => {
   console.log('服务器开启成功~')
 })
@@ -406,7 +411,7 @@ server.listen(8000, () => {
 
 > 【回顾】：HTTP Request Header 相关知识。
 
-在 `request` 对象的 `header` 属性中，也包含很多有用的信息，客户端会默认传递过来一些信息：比如
+在 `request` 对象的 `header` 属性中，也包含很多有用的信息，客户端会默认传递过来一些信息：比如：
 
 ```yaml
 Accept: '/'
@@ -549,7 +554,7 @@ Http 状态码非常多，可以根据不同的情况，给客户端返回不同
 | 201    | Created               | POST 请求，创建新的资源                            |
 | 301    | Moved Permanently     | 请求资源的 URL，已经修改，响应中会给出新的 URL     |
 | 400    | Bad Request           | 客户端错误，服务器无法处理。                       |
-| 401    | Unauth                | 未授权的请求。                                     |
+| 401    | Unauthorized          | 未授权的请求。                                     |
 | 403    | Forbidden             | 没有权限访问。                                     |
 | 404    | Not Found             | 服务器找不到请求资源                               |
 | 500    | Internal Server Error | 服务器出现无法处理的错误                           |
@@ -579,7 +584,7 @@ const server = http.createServer((req, res) => {
   res.end('hello world aaaa')
 })
 
-// 2.开启server服务器
+// 2.开启 server 服务器
 server.listen(8000, () => {
   console.log('服务器开启成功~')
 })
@@ -589,14 +594,14 @@ server.listen(8000, () => {
 
 返回头部信息，主要有两种方式：
 
-- `res.setHeader`：一次写入一个头部信息；
-- `res.writeHead`：同时写入 status 状态码和 header 信息；
+- 方式一：`res.setHeader`：一次写入一个头部信息；
+- 方式二：`res.writeHead`：同时写入 status 状态码和 header 信息；
 
 Header 设置 `Content-Type ` 有什么作用呢？
 
 - 默认客户端接收到的是字符串，客户端会按照自己默认的方式进行处理；
 
-在 `cCntent-Type` 中，指定返回的数据格式，和字符编码。
+在 `Cntent-Type` 中，指定返回的数据格式，和字符编码。
 
 > 【注意】：`header` 中的属性信息，是大小写敏感的。
 
@@ -608,10 +613,11 @@ const http = require('http')
 // 1.创建server服务器
 const server = http.createServer((req, res) => {
   // 设置 header 信息: 数据的类型以及数据的编码格式
-  // 1.单独设置某一个 header
+  
+  // 1.方式一：单独设置某一个 header
   // res.setHeader('Content-Type', 'text/plain;charset=utf8;')
 
-  // 2.和 http status code 一起设置
+  // 2.方式二：和 http status code 一起设置
   res.writeHead(200, {
     'Content-Type': 'application/json;charset=utf8;'
   })
