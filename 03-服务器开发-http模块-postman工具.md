@@ -45,7 +45,7 @@ const server = new http.Server((req, res) =? {
 })
 ```
 
-上面我们已经知道，创建 Server 时会传入一个回调函数，这个回调函数在被调用时会传入两个参数：
+上面我们已经知道，创建 Server 时会传入一个回调函数，这个回调函数在被调用时，会传入两个参数：
 
 - `request` 请求对象，包含请求相关的信息；本质上是一个可读流 readable；
 - `response` 响应对象，包含我们要发送给客户端的信息；本质上是一个可写流 writeable。
@@ -84,7 +84,7 @@ const server = http.createServer((request, response) => {
 
 // 开启服务器，指定监听的端口。
 server.listen(8000, () => {
-  console.log('服务器看起成功了~')
+  console.log('服务器开启成功了~')
 })
 ```
 
@@ -98,7 +98,7 @@ server.listen(8000, () => {
 >
 > 通常操作系统使用两个字节，表示端口；
 >
-> - 即最大端口是 `255 * 255 = 65536`，即 `0 - 65535` 之间的端口。
+> - 即最大端口是 `256 * 256 = 65536`，即 `0 - 65535` 之间的端口。
 
 ## 3.创建多个服务
 
@@ -187,7 +187,7 @@ nodemon xxx.js
   - 比如客户端信息、接受数据的格式、支持的编码格式等等；
 - 等等。
 
-这些信息，Node 会封装到一个 `request` 的对象中，方便开发者进行处理。
+这些信息，Node 会封装到 `request` 对象中，方便开发者进行处理。
 
 05-Node 服务器-http\03-http 服务器-request 对象.js
 
@@ -357,7 +357,7 @@ server.listen(8000, () => {
 
 > 【补充】：在框架（如 _express_）中，封装了 `method` 和 `url` 结合的处理。
 
-# 八、body 参数的获取
+# 八、body 请求体参数的获取
 
 使用 POST 请求传递参数的接口，参数在 body 请求体中。
 
@@ -365,7 +365,7 @@ server.listen(8000, () => {
 
 - 请求路径 `url` 为 `/users`；
 - 请求方式 `method` 为 `POST`；
-- body 体中携带数据 `username`和`password`；
+- body 请求体中，携带数据 `username`和`password`；
 
 `reuqest` 对象中，不能直接取到 body 请求体；需要通过监听 `reqest` 的 `"data"` 事件，获取 body 请求体。
 
@@ -464,7 +464,7 @@ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
 在 postmen 中，选择默认的授权方式，如 ”Bearer Token“，token 会被自动放入请求头中；
 
-在 `req.header.authoritarian` 中获取：
+在 `req.header.authorization` 中获取：
 
 05-Node 服务器-http\08-request-header 参数.js
 
@@ -597,9 +597,7 @@ server.listen(8000, () => {
 - 方式一：`res.setHeader`：一次写入一个头部信息；
 - 方式二：`res.writeHead`：同时写入 status 状态码和 header 信息；
 
-Header 设置 `Content-Type ` 有什么作用呢？
-
-- 默认客户端接收到的是字符串，客户端会按照自己默认的方式进行处理；
+Header 设置 `Content-Type `，让客户端以指定的格式和编码处理返回的结果；
 
 在 `Cntent-Type` 中，指定返回的数据格式，和字符编码。
 
