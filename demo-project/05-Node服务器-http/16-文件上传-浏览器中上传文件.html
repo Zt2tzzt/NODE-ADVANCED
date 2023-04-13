@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+
+	<input type="file">
+	<button>上传</button>
+	
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	<script>
+		const btnEl = document.querySelector('button')
+		btnEl.onclick = function() {
+
+			// 创建表单对象
+			const formData = new FormData()
+
+			// 将选中的图标文件，放入表单
+			const inputEl = document.querySelector('input')
+			formData.set('pic', inputEl.files[0])
+
+			// 发送 POST 网络请求，将表单数据携带到服务器
+			axios({
+				method: 'post',
+				url: 'http://localhost:8000',
+				data: formData,
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			})
+
+		}
+	</script>
+</body>
+</html>

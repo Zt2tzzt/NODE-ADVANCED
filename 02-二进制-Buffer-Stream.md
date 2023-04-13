@@ -477,7 +477,7 @@ fs.writeFile(
 
 这个时候，使用 `fs.createWriteStream`，传入其中的 options 中，有几个参数，更多参数参考[官网文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatewritestreampath-options)：
 
-- `flags`：默认是 `w`，如果我们希望是追加写入，可以使用 `a` 或者 `a+`；
+- `flags`：默认是 `w`，如果希望是追加写入，可以使用 `a` 或者 `a+`；
 - `start`：写入的位置；
 
 > 【注意】：`flag` 使用 `a+` 时，Windows 系统上该操作是无效的，要使用 `r+`；
