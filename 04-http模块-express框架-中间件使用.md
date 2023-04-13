@@ -1,6 +1,7 @@
 # 一、http 发送请求
 
 我们知道，axios 库，既可以在浏览器中使用，也可以在 Node 中使用。
+
 - 在浏览器中，axios 基于 xhr 技术进行封装。
 - 在 Node 中，没有 xhr 技术，axios 是基于 http 内置模块进行封装的；
 
@@ -8,7 +9,7 @@
 
 使用 axios，发送一个网络请求。
 
-05-Node服务器-http\12-axios发送网络请求.js
+05-Node 服务器-http\12-axios 发送网络请求.js
 
 ```js
 const axios = require('axios')
@@ -21,7 +22,7 @@ axios.get('http://localhost:8000').then(res => {
 
 使用 http 模块 `get` 方法，发送一个 GET 请求；
 
-05-Node服务器-http\13-http模块发送网络请求.js
+05-Node 服务器-http\13-http 模块发送网络请求.js
 
 ```js
 const http = require('http')
@@ -44,27 +45,29 @@ http.get('http://localhost:8000', res => {
 
 使用 http 模块的 `request` 方法，发送 POST 请求。
 
-05-Node服务器-http\13-http模块发送网络请求.js
+05-Node 服务器-http\13-http 模块发送网络请求.js
 
 ```js
 const http = require('http')
 
-const req = http.request({
-  method: 'POST',
-  hostname: 'localhost',
-  port: 8000
-}, res => {
-  res.on('data', data => {
+const req = http.request(
+  {
+    method: 'POST',
+    hostname: 'localhost',
+    port: 8000
+  },
+  res => {
+    res.on('data', data => {
+      const dataString = data.toString()
+      console.log('dataString:', dataString)
+      // [{"name":"zzt","age":18},{"name":"kobe","age":30}]
 
-    const dataString = data.toString()
-    console.log('dataString:', dataString)
-    // [{"name":"zzt","age":18},{"name":"kobe","age":30}]
-
-    const dataInfo = JSON.parse(dataString)
-    console.log('datainfo:', dataInfo)
-    // [ { name: 'zzt', age: 18 }, { name: 'kobe', age: 30 } ]
-  })
-})
+      const dataInfo = JSON.parse(dataString)
+      console.log('datainfo:', dataInfo)
+      // [ { name: 'zzt', age: 18 }, { name: 'kobe', age: 30 } ]
+    })
+  }
+)
 
 req.end() //  req 对象，本质上是可写流，必须要关闭，否则发送请求无效。
 ```
@@ -89,7 +92,7 @@ req.end() //  req 对象，本质上是可写流，必须要关闭，否则发�
 
 以下一个文件上传的完整流程，但是是错误的示范：
 
-05_Node服务器-http\15_文件上传-错误的做法.js
+05*Node 服务器-http\15*文件上传-错误的做法.js
 
 ```js
 const http = require('http')
@@ -127,7 +130,7 @@ server.listen(8000, () => {
 
 在其中加入文件上传进度显示的功能，返回给客户端。
 
-05_Node服务器-http\15_文件上传-错误的做法.js
+05*Node 服务器-http\15*文件上传-错误的做法.js
 
 ```js
 const http = require('http')
@@ -154,7 +157,7 @@ const server = http.createServer((req, res) => {
     data: <Buffer 64 03 c9 1c c0 e6 ad 52 d4 97 02 4e c4 a9 c5 a8 a6 24 c1 51 52 47 59 10 20 47 1d 2a 71 87 08 71 3b 5e 65 82 cb 4b 59 2e b9 b0 a9 29 4a a5 09 9f bc 16 ... 35064 more bytes> */
 
     writeStream.write(data)
-    
+
     // 进度显示
     countSize += data.length
     console.log('countSize:', countSize)
@@ -192,17 +195,17 @@ server.listen(8000, () => {
 - 如果解码出来的是文本，就能看到内容；
 - 如果解码出来的是二进制文件，只能看到二进制的字符串。
 
-2.发现控制台中，要显示数据过多，有些被隐藏了。在 VSCode 中，为 Node 程序使用 Debug。
+  2.发现控制台中，要显示数据过多，有些被隐藏了。在 VSCode 中，为 Node 程序使用 Debug。
 
 - 在打印 data 的那行代码上，打上断点。
 - 可看到传输到服务器的完整数据，里面有请求中的一些多余信息，比如表单中的字段名。
 
-3.读取到所有的数据后，进行截取。
+  3.读取到所有的数据后，进行截取。
 
 - 使用正则表达式 `/^\s\s/` 匹配`“/r/n"`；
 - 获取 boundary 并替换掉它
 
-05-Node服务器-http\15-文件上传-正确的做法.js
+05-Node 服务器-http\15-文件上传-正确的做法.js
 
 ```js
 const http = require('http')
@@ -251,7 +254,7 @@ server.listen(8000, () => {
 
 4. 模拟给客户端返回文件上传的进度。
 
-05-Node服务器-http\15-文件上传-正确的做法.js
+05-Node 服务器-http\15-文件上传-正确的做法.js
 
 ```js
 const http = require('http')
@@ -276,7 +279,7 @@ const server = http.createServer((req, res) => {
 
     // 文件上传进度
     countSize += data.length
-    res.write(`文件上传进度：${Math.round(countSize / fileSize * 100)}%\n`)
+    res.write(`文件上传进度：${Math.round((countSize / fileSize) * 100)}%\n`)
   })
 
   req.on('end', () => {
@@ -298,7 +301,6 @@ const server = http.createServer((req, res) => {
       console.log('文件存储成功')
       res.end('文件上传成功')
     })
-
   })
 })
 
@@ -309,47 +311,44 @@ server.listen(8000, () => {
 
 在浏览器中上传文件，进行测试。
 
-05-Node服务器-http\16-文件上传-浏览器中上传文件.html
+05-Node 服务器-http\16-文件上传-浏览器中上传文件.html
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <input type="file" />
+    <button>上传</button>
 
-  <input type="file">
-  <button>上传</button>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const btnEl = document.querySelector('button')
+      btnEl.onclick = function () {
+        // 创建表单对象
+        const formData = new FormData()
 
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-  <script>
-    const btnEl = document.querySelector('button')
-    btnEl.onclick = function() {
+        // 将选中的图标文件，放入表单
+        const inputEl = document.querySelector('input')
+        formData.set('pic', inputEl.files[0])
 
-      // 创建表单对象
-      const formData = new FormData()
-
-      // 将选中的图标文件，放入表单
-      const inputEl = document.querySelector('input')
-      formData.set('pic', inputEl.files[0])
-
-      // 发送 POST 网络请求，将表单数据携带到服务器
-      axios({
-        method: 'post',
-        url: 'http://localhost:8000',
-        data: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-
-    }
-  </script>
-</body>
+        // 发送 POST 网络请求，将表单数据携带到服务器
+        axios({
+          method: 'post',
+          url: 'http://localhost:8000',
+          data: formData,
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+      }
+    </script>
+  </body>
 </html>
 ```
 
@@ -362,13 +361,14 @@ server.listen(8000, () => {
 # 三、Web 服务器框架
 
 我们已知，http 内置模块可用来搭建 Web 服务器，为什么还要使用框架？
+
 - 原生 http 在进行很多处理时，较为复杂；
 - URL 处理、Method 处理、参数处理、逻辑代码处理等等，都需要自己手动封装完成；
 - 并且所有的代码逻辑都放在一起，会非常的混乱；
 
-目前在 Node 中，比较流行的 Web 服务器框架是 *express*、*koa*；
+目前在 Node 中，比较流行的 Web 服务器框架是 _express_、_koa_；
 
-*express* 早于 *koa* 出现，并且在 Node 社区中迅速流行起来
+_express_ 早于 _koa_ 出现，并且在 Node 社区中迅速流行起来
 
 基于 express 可以：
 
@@ -419,7 +419,7 @@ npm install express
 
 创建一个 express 服务器：
 
-06-Node服务器-express\01-express的基本使用.js
+06-Node 服务器-express\01-express 的基本使用.js
 
 ```js
 const express = require('express')
@@ -444,10 +444,12 @@ app.listen(9000, () => {
 使用 express，可以方便的将不同请求的不同逻辑，进行分离；无论是不同的 URL，还是 get、post 等请求方式；方便对代码逻辑进行维护、扩展；
 
 请求的路径中如果有一些参数，可以这样表达：
+
 - `/users/:userId`；
 - 在 request 对象中，可以通过 `req.params.userId` 获取;
 
 返回响应结果数据，可以方便的使用 `res.json`、`res.end`：其他的方式可[查看文档](https://www.expressjs.com.cn/guide/routing.html)；
+
 # 六、Express 中间件
 
 Express 是**路由**和**中间件**组成的 Web 框架，它本身的功能非常少：
@@ -457,6 +459,7 @@ Express 应用程序本质上是一系列中间件函数的调用；
 中间件的本质是传递给 express 的一个**回调函数**；
 
 这个回调函数接受三个参数：
+
 - 请求对象 `request`；
 - 响应对象 `response`；
 - `next` 函数（在 express 中定义的，用于执行下一个可匹配到的中间件的函数）；
@@ -472,7 +475,7 @@ Express 应用程序本质上是一系列中间件函数的调用；
 
 如果当前中间件功能没有结束“请求-响应周期”，则必须调用 `next` 函数，将控制权传递给下一个中间件，否则，请求将被挂起。
 
-06-Node服务器-express\02-认识中间件.js
+06-Node 服务器-express\02-认识中间件.js
 
 ```js
 const express = require('express')
@@ -481,7 +484,6 @@ const app = express()
 
 // 给 express 创建的 app 传入一个回调函数，这个回调函就，称之为是中间件(middleware)
 app.post('/login', (req, res, next) => {
-
   // 1.中间件中可以执行任意代码
   console.log('first middleware exec~')
 
@@ -494,7 +496,7 @@ app.post('/login', (req, res, next) => {
   req.zzt = 'zzt'
 
   // 3.在中间件中，结束响应周期，并返回响应结果
-  res.json({ message: "登录成功, 欢迎回来", code: 0 })
+  res.json({ message: '登录成功, 欢迎回来', code: 0 })
 
   // 4.调用 next 方法，执行可匹配到的下一个中间件。
   next()
@@ -510,15 +512,13 @@ app.listen(9000, () => {
 })
 ```
 
-> 【注意】：*express* 框架中，可以单独处理 method 和 url，其实也是使用了中间件的原因。
+> 【注意】：_express_ 框架中，可以单独处理 method 和 url，其实也是使用了中间件的原因。
 
-当 *express* 接收到客户端发送的网络请求时, 就在所有中间中，进行匹配。
+当 _express_ 接收到客户端发送的网络请求时, 就在所有中间中，进行匹配。
 
 当匹配到第一个符合要求的中间件时, 那么就会执行这个中间件.
 
 后续的中间件是否执行，取决于上一个中间件有没有执行 next 函数
-
-
 
 # 七、Express 编写中间件
 
@@ -533,7 +533,7 @@ express 主要提供了两种方式，将一个中间件应用到应用程序中
 
 :egg: 案例一：使用 `use` 注册一个最普通的中间件。
 
-06-Node服务器-express\03-注册普通的中间件.js
+06-Node 服务器-express\03-注册普通的中间件.js
 
 ```js
 const express = require('express')
@@ -561,7 +561,6 @@ app.use((req, res, next) => {
   console.log('normal middleware 02') // 打印了
 })
 
-
 // 开启服务器
 app.listen(9000, () => {
   console.log('express服务器启动成功~')
@@ -569,3 +568,4 @@ app.listen(9000, () => {
 ```
 
 通过 `use` 方法注册的中间件：是最普通的/简单的中间件，无论是什么请求方式都可以匹配上。
+
