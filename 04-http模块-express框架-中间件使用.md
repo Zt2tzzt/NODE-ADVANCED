@@ -450,11 +450,6 @@ app.listen(9000, () => {
 
 方便对代码逻辑进行维护、扩展；
 
-请求的路径中如果有一些参数，可以这样表达：
-
-- `/users/:userId`；
-- 在 request 对象中，可以通过 `req.params.userId` 获取;
-
 返回响应结果数据，可以方便的使用 `res.json`、`res.end`：更多方式[查看文档](https://www.expressjs.com.cn/guide/routing.html)；
 
 # 六、Express 中间件
@@ -537,6 +532,8 @@ express 服务器，主要提供了两种方式，将一个中间件应用到应
 
 - `[methods]` 指的是常用的请求方式；比如：`app.get` 或 `app.post` 等；
 - `[methods]` 的方式，本质是 `use` 的特殊情况；
+
+## 1.最普通的中间件
 
 :egg: 案例一：使用 `use` 注册一个最普通的中间件。
 
