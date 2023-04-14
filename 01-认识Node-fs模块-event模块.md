@@ -53,10 +53,10 @@ fs 是 **File System** 的缩写，表示文件系统。
 
 服务器需要将各种数据、文件，放置到不同的地方；
 
-- 比如用户数据可能大多数是放到数据库中的；
-- 比如某些配置文件，或者静态资源（图片、音视频），是以文件的形式，存储于操作系统上的。
+- 比如：用户数据可能大多数是放到数据库中的；
+- 比如：某些配置文件，或者静态资源（图片、音视频），是以文件的形式，存储于操作系统上的。
 
-Node 也有自己的文件系统操作模块，就是 `fs`：
+Node 的文件系统操作模块，就是 `fs`：
 
 Node 是**跨平台**的，借助于其中封装的文件系统，在任何的操作系统（window、MacOS、Linux）上，可直接去操作文件；
 
@@ -96,7 +96,7 @@ const fs = require('fs')
  */
 const res1 = fs.readFileSync('./aaa.txt')
 console.log('res1:', res1)
-// res1: <Buffer 48 65 6c 6c 6f 20 46 72 6f 67 20 e4 bd a0 e5 a5 bd e5 95 8a ef bc 8c e6 9d 8e e9 93 b6 e6 b2 b3>
+// <Buffer 48 65 6c 6c 6f 20 46 72 6f 67 20 e4 bd a0 e5 a5 bd e5 95 8a ef bc 8c e6 9d 8e e9 93 b6 e6 b2 b3>
 
 /**
  * 读取文件时，传入编码方式，如 'utf8'，告诉 Node 读取文件时，应该如何解码。
@@ -105,7 +105,7 @@ const res2 = fs.readFileSync('./aaa.txt', {
   encoding: 'utf8'
 })
 console.log('res2:', res2)
-// res1: Hello Frog 你好啊，李银河
+// Hello Frog 你好啊，李银河
 ```
 
 > 【注意】：文件读取时，如果不填写 `encoding`，返回的结果是 Buffer；
@@ -175,7 +175,7 @@ fs.promises
 
 在系统层面，所有文件系统操作，都使用这些文件描述符，来标识和跟踪每个文件。
 
-- Windows 系统使用了一个虽然不同但概念上类似的机制来跟踪资源（Node 已屏蔽）。
+- Windows 系统使用了一个虽然不同但概念上类似的机制，来跟踪资源（Node 已屏蔽）。
 
 为了简化用户的工作，Node.js 抽象出操作系统之间的特定差异，并为所有打开的文件，分配一个数字型的文件描述符。
 
@@ -403,7 +403,7 @@ fs.rename('./ccc.txt', './ddd.txt', err => {
 Node 中，很多核心 API，都基于 events 事件驱动；
 
 - 比如 stream，http。
-- 在 http 中，request 监听文件传输时，是以”流“来一段一段传输的，
+- 在 http 中，`request` 对象监听文件传输时，是以”流“来一段一段传输的，
 
 Node 中，events 异步事件驱动，这个体系中：
 
