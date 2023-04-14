@@ -13,7 +13,7 @@
 - 比如 Node.js
 - ...
 
-Nods 有 `http` 模块，通常使用基于该模块的框架，如 _express_、_koa_，开发服务器。
+Nods 有 `http` 模块，通常使用基于该模块的框架（如 _express_、_koa_）开发服务器。
 
 # 二、http 模块
 
@@ -45,7 +45,7 @@ const server = new http.Server((req, res) =? {
 })
 ```
 
-上面我们已经知道，创建 Server 时会传入一个回调函数，这个回调函数在被调用时，会传入两个参数：
+现在我们已经知道，创建 Server 时会传入一个回调函数，这个回调函数在被调用时，会传入两个参数：
 
 - `request` 请求对象，包含请求相关的信息；本质上是一个可读流 readable；
 - `response` 响应对象，包含我们要发送给客户端的信息；本质上是一个可写流 writeable。
@@ -411,7 +411,9 @@ server.listen(8000, () => {
 
 > 【回顾】：HTTP Request Header 相关知识。
 
-在 `request` 对象的 `header` 属性中，也包含很多有用的信息，客户端会默认传递过来一些信息：比如：
+在 `request` 对象的 `header` 属性中，也包含很多有用的信息；
+
+客户端会默认传递过来一些信息：比如：
 
 ```yaml
 Accept: '/'
@@ -471,7 +473,7 @@ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 ```js
 const http = require('http')
 
-// 1.创建server服务器
+// 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   console.log(req.headers)
   // {
@@ -496,7 +498,7 @@ const server = http.createServer((req, res) => {
   res.end('查看 header 的信息~')
 })
 
-// 2.开启server服务器
+// 2.开启 server 服务器
 server.listen(8000, () => {
   console.log('服务器开启成功~')
 })
@@ -617,7 +619,7 @@ const server = http.createServer((req, res) => {
 
   // 2.方式二：和 http status code 一起设置
   res.writeHead(200, {
-    'Content-Type': 'application/json;charset=utf8;'
+    "Content-Type": 'application/json;charset=utf8;'
   })
 
   const list = [
