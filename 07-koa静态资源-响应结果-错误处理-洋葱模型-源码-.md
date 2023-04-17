@@ -10,7 +10,7 @@ npm install koa-static
 
 部署的过程类似于 express：
 
-07-Node服务器-Loa\07-koa静态资源服务器.js
+07-Node 服务器-Loa\07-koa 静态资源服务器.js
 
 ```js
 const Koa = require('koa')
@@ -31,6 +31,7 @@ app.listen(9000, () => {
 # 二、Koa 响应数据结果
 
 响应输出结果时：可将 body 响应主体，设置为以下之一：
+
 - string：字符串数据。
 - Buffer：Buffer 数据。
 - Stream：流数据。
@@ -41,7 +42,7 @@ app.listen(9000, () => {
 
 请求状态 status
 
-07-Node服务器-Loa\08-koa响应结果.js
+07-Node 服务器-Loa\08-koa 响应结果.js
 
 ```js
 const fs = require('fs')
@@ -56,7 +57,6 @@ const userRouter = new KoaRouter({ prefix: '/users' })
 
 // 在路由中，注册中间件
 userRouter.get('/', (ctx, next) => {
-
   // 1.body 类型设置未 string
   // ctx.body = 'user list data~'
 
@@ -78,8 +78,8 @@ userRouter.get('/', (ctx, next) => {
   ctx.body = {
     code: 0,
     data: [
-      {id: 111, name: 'iphone', price: 999},
-      {id: 112, name: 'xiaomi', price: 666}
+      { id: 111, name: 'iphone', price: 999 },
+      { id: 112, name: 'xiaomi', price: 666 }
     ]
   }
 
@@ -87,11 +87,9 @@ userRouter.get('/', (ctx, next) => {
   // ctx.body = null
 })
 
-
 // 注册路由
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods())
-
 
 // 开启 Koa 服务器
 app.listen(9000, () => {
@@ -105,7 +103,7 @@ app.listen(9000, () => {
 
 在一个中间件中，完成错误处理：
 
-07-Node服务器-Loa\09-koa错误处理.js
+07-Node 服务器-Loa\09-koa 错误处理.js
 
 ```js
 const Koa = require('koa')
@@ -119,7 +117,6 @@ const userRouter = new KoaRouter({ prefix: '/users' })
 
 // 在路由中，注册中间件
 userRouter.get('/', (ctx, next) => {
-
   const isAuth = false
 
   if (isAuth) {
@@ -136,7 +133,6 @@ userRouter.get('/', (ctx, next) => {
 app.use(userRouter.routes())
 app.use(userRouter.allowedMethods())
 
-
 // 开启 Koa 服务器
 app.listen(9000, () => {
   console.log('koa 服务器启动成功~')
@@ -149,10 +145,10 @@ app.listen(9000, () => {
 
 而是要使用 `ctx.app`（就是 koa 创建服务器时，返回的 app 对象），本质上是一个 EventEmiter
 
-- 产生错误时，发送一个 “error” 事件，并传递错误码和 ctx。
-- 使用 app 监听 “error” 事件，在一个单独的回调函数中，处理错误。
+- 产生错误时，可发送一个 `“error”` 事件，并传递错误码和 `ctx` 对象。
+- 使用 app 监听 `“error”` 事件，在一个单独的回调函数中，处理错误。
 
-07-Node服务器-Loa\09-koa错误处理.js
+07-Node 服务器-Loa\09-koa 错误处理.js
 
 ```js
 const Koa = require('koa')
@@ -166,7 +162,6 @@ const userRouter = new KoaRouter({ prefix: '/users' })
 
 // 在路由中，注册中间件
 userRouter.get('/', (ctx, next) => {
-
   const isAuth = false
 
   if (isAuth) {
@@ -186,14 +181,14 @@ app.on('error', (code, ctx) => {
   switch (errCode) {
     case -1001:
       msg = '帐号或密码错误~'
-      break;
+      break
     case -1002:
       msg = '请求参数不正确~'
-      break;
+      break
     case -1003:
       msg = '未授权的请求，请检查token是否正确~'
     default:
-      break;
+      break
   }
 
   ctx.body = {
@@ -202,51 +197,50 @@ app.on('error', (code, ctx) => {
   }
 })
 
-
 // 开启 Koa 服务器
 app.listen(9000, () => {
   console.log('koa 服务器启动成功~')
 })
 ```
 
-> 【补充】：chrome 浏览器，不建议访问一些特殊的端口，其中包括 6000 端口。
+> 【补充】：chrome 浏览器，不建议访问一些特殊的端口，其中包括 `6000` 端口。
 
 # 四、Koa 和 express 的区别（面试）
 
-从架构设计上来说： 
+从架构设计上来说：
 
 express 是完整和强大的，其中帮助我们内置了非常多好用的功能；
 
-> Vue2 中可以使用 Vue 实例作为事件总线。早期的 Vue，还封装了自己的网络请求。
+> 【补充】：就像 Vue2 中可以使用 Vue 实例作为事件总线。早期的 Vue，还封装了自己的网络请求。
 
-koa 是简洁和自由的，它只包含最核心的功能，并不会对我们使用其他中间件进行任何的限制。 
-- 甚至是在 app 中连最基本的 get、post 都没有提供； 
+koa 是简洁和自由的，它只包含最核心的功能，并不会对使用的其他中间件进行任何限制。
+
+- 甚至是在 app 中连最基本的 get、post 方法，都没有提供；
 - 需要通过 ctx 来判断请求方式和请求路径。
 
+express 和 koa 框架他们的核心都是中间件，它们的核心区别，也在于中间件的使用：
 
-express 和 koa 框架他们的核心都是中间件：
+它们的中间件的执行机制，是不同的，特别是针对某个中间件中，包含异步操作时；
 
-它们的中间件的执行机制，是不同的，特别是针对某个中间件中包含异步操作时；
+express 和 koa 中间件的执行顺序分析；
 
-所以，接下来，我们再来研究一下 express 和 koa 中间件的执行顺序问题；
+koa 中的中间件：
 
-koa 中的中间件，、
+- 在执行同步代码时，只要调用 `next` 方法，就会执行下一个中间件，之后再执行 `next` 方法后面的代码。
+- 在执行异步代码时，不会等到异步代码的结果。如果需要等待结果，在 next 函数调用前，加 `await`。
 
-- 在执行同步代码时，只要调用 next 方法，就会执行下一个中间件，之后再执行 next 方法后面的代码。
-- 在执行异步代码时，不会等到异步代码的结果。如果需要等待结果，在 next 函数调用前，加 await。
-
-> 【回顾】：await 的原理，生成器。
+> 【回顾】：async await 异步函数的原理，生成器。
 
 express 中间件：
 
 - 在执行同步代码时，与 koa 没有区别。
-- 在执行异步代码时，next 函数返回的不是 Promise，不能用 await；（**核心区别**）
-  - express 框架设计的初衷，就是同步执行代码，并返回结果，没有考略异步。
-  - 无法返回到上一个中间件的 next 方法调用后，去执行代码。
+- 在执行异步代码时，`next` 函数返回的不是 Promise，使用 `await`；是无效的（**核心区别**）：
+  - express 框架设计的初衷，就是同步执行代码，并返回结果，没有考虑异步。
+  - 无法返回到上一个中间件的 `next` 方法调用后，去执行代码。
 
 express 执行同步代码：
 
-08-koa和express的区别\02_express中间件-执行异步.js
+08-koa 和 express 的区别\02_express 中间件-执行异步.js
 
 ```js
 const express = require('express')
@@ -255,32 +249,33 @@ const app = express()
 
 app.use((req, res, next) => {
   console.log('express middleware 1')
-  req.msg = 'aaa'
+  req.msg = 'aaa' // 1
   next()
-  res.json(req.msg)
+  res.json(req.msg) // 5
 })
 
 app.use((req, res, next) => {
   console.log('express middleware 2')
-  req.msg += 'bbb'
+  req.msg += 'bbb' // 2
   next()
+  res.msg += 'ddd' // 4
 })
 
 app.use((req, res, next) => {
   console.log('express middleware 3')
-  req.msg += 'ccc'
+  req.msg += 'ccc' // 3
 })
 
 app.listen(9000, () => {
   console.log('express 服务器启动成功了')
 })
 
-// 客户端接收到的返回结果 "aaabbbccc"
+// 客户端接收到的返回结果 "aaabbbcccddd"
 ```
 
 Koa 执行同步代码：
 
-08-koa和express的区别\03-koa中间件-执行同步.js
+08-koa 和 express 的区别\03-koa 中间件-执行同步.js
 
 ```js
 const Koa = require('koa')
@@ -291,7 +286,7 @@ const app = new Koa()
 // 注册中间件
 app.use((ctx, next) => {
   console.log('koa middleware01')
-  ctx.msg = 'aaa'
+  ctx.msg = 'aaa' // 1
   next()
 
   // 返回结果
@@ -300,15 +295,14 @@ app.use((ctx, next) => {
 
 app.use((ctx, next) => {
   console.log('koa middleware02')
-  ctx.msg += 'bbb'
+  ctx.msg += 'bbb' // 2
   next()
 })
 
 app.use((ctx, next) => {
   console.log('koa middleware03')
-  ctx.msg += 'ccc'
+  ctx.msg += 'ccc' // 3
 })
-
 
 // 启动服务器
 app.listen(6000, () => {
@@ -318,7 +312,7 @@ app.listen(6000, () => {
 
 express 执行异步代码：
 
-08-koa和express的区别\02_express中间件-执行异步.js
+08-koa 和 express 的区别\02_express 中间件-执行异步.js
 
 ```js
 const express = require('express')
@@ -352,7 +346,6 @@ app.use(async (req, res, next) => {
   res.json(req.msg)
 })
 
-
 // 启动服务器
 app.listen(9000, () => {
   console.log('express服务器启动成功~')
@@ -363,7 +356,7 @@ app.listen(9000, () => {
 
 Koa 执行异步代码：
 
-08-koa和express的区别\04_koa中间件-执行异步.js
+08-koa 和 express 的区别\04_koa 中间件-执行异步.js
 
 ```js
 const Koa = require('koa')
@@ -401,7 +394,6 @@ app.use(async (ctx, next) => {
   ctx.msg += res.data.data.banner.list[0].title
 })
 
-
 // 启动服务器
 app.listen(9000, () => {
   console.log('koa服务器启动成功~')
@@ -420,8 +412,6 @@ Koa 执行同步，异步代码，express 执行同步代码时，都适用于�
 express 执行异步代码时，就不适用了。
 
 <img src="NodeAssets/koa洋葱模型.jpg" alt="Koa洋葱模型" style="zoom:60%;" />
-
-
 
 # 六、源码理解：
 

@@ -13,6 +13,7 @@ app.use((req, res, next) => {
   console.log('express middleware 2')
   req.msg += 'bbb'
   next()
+  req.msg += 'ddd'
 })
 
 app.use((req, res, next) => {
