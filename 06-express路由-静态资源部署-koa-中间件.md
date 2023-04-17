@@ -319,79 +319,407 @@ app.listen(9000, () => {
 })
 ```
 
+ctx 参数解析：
+
+07-Node服务器-Loa\02-koa中间件-ctx参数解析.js
+
+```js
+const Koa = require('koa')
+
+const app = new Koa()
+
+app.use((ctx, next) => {
+  // 1.请求对象
+  console.log('ctx.request:', ctx.request) // 请求对象: Koa 封装的请求对象
+  console.log('ctx.req:', ctx.req) // 请求对象: Node 封装的请求对象
+
+  // 2.响应结果
+  console.log('ctx.response:', ctx.response) // 响应对象: Koa 封装的响应对象
+  console.log('ctx.res:', ctx.res) // 响应对象: Node 封装的响应对象
+
+  // 3/其它属性
+  console.log('ctx.query:', ctx.query)
+  console.log('ctx.params:', ctx.params)
+})
+
+app.use((ctx, next) => {
+  console.log('second middleware')
+})
+
+app.listen(9000, () => {
+  console.log('Koa 挥舞起启动成功~')
+})
+```
 
 
-# 二、Koa 中间件
 
-只能传入回调函数，不能使用方法，或传入路径。
+# 六、Koa 中间件
 
----
+koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用方法，或传入路径。
 
-在 Koa 中，进行路径匹配和方法匹配。
+Koa 没有提供 methods 的方式，来注册中间件；也没有提供 path 的路径匹配；
 
-但实际开发中，不会这么做，太繁琐。
+真实开发中我们如何将路径和 method 分离呢？
 
-一般会使用路由。
+方式一：根据 request 自己来判断；（实际开发中，不会这么做，太繁琐。）
 
----
+07-Node服务器-Loa\03-koa区分方法和路径.js
 
-Koa 中的路由。
+```js
+const Koa = require('koa')
 
-需要手动安装。
+const app = new Koa()
+
+app.use((ctx, next) => {
+  if (ctx.path === '/users') {
+
+    if (ctx.method === 'GET') {
+      ctx.body = 'user data list~'
+    } else if (ctx.method === 'POST') {
+      ctx.body = 'create user success~'
+    }
+
+  } else if (ctx.path === '/home') {
+    ctx.body = 'home data list~'
+  } else if (ctx.path === '/login') {
+    ctx.body = 'login success~'
+  }
+})
+
+app.listen(9000, () => {
+  console.log('Koa 服务器启动成功~')
+})
+```
+
+方式二：使用第三方路由中间件；
+
+见下方案例。
+
+# 七、Koa 路由
+
+koa 官方并没有提供路由的库，需要选择第三方库：
 
 有两种选择，都可以：
 
 - [koa-router](https://github.com/ZijianHe/koa-router)
 - [router](https://github.com/koajs/router)（项目中使用）
 
-> 【补充】：在一个项目中可以即使用 yarn，又使用 npm，但建议统一用一种包管理工具。
+需要手动安装。
 
----
+```shell
+npm install @koa/router
+```
 
-创建路由
+创建路由，封装一个 `user.router.js` 的文件：
 
-在路由中，注册中间件。此时hi既可以用 method 匹配，又可以用 path 匹配。
+在路由中，注册中间件。
+
+07-Node服务器-Loa\router\user.router.js
+
+```js
+const KoaRouter = require('@koa/router')
+
+// 1.创建路由对象
+const userRouter = new KoaRouter({ prefix: '/users' })
+
+// 2.在路由中，注册中间件 path/method
+userRouter.get('/', (ctx, next) => {
+  ctx.body = 'user list data~'
+})
+userRouter.get('/:id', (ctx, next) => {
+  const id = ctx.params.id
+  ctx.body = `get user ${id} data~`
+})
+userRouter.post('/', (ctx, next) => {
+  ctx.body = 'create user success~~'
+})
+userRouter.delete('/:id', (ctx, next) => {
+  const id = ctx.params.id
+  ctx.body = `delete user ${id} data~`
+})
+userRouter.patch('/:id', (ctx, next) => {
+  const id = ctx.params.id
+  ctx.body = `patch user ${id} data~`
+})
+
+module.exports = userRouter
+```
 
 让路由生效。
 
-- app.use(userRouter.routes())
+使用 `app.use(router.routes())` 注册路由
 
-在 Koa 中，任何没有匹配到的请求，都会返回 Not Found，处理这种情况。
+在 Koa 中，任何没有匹配到的请求，默认都会返回“Not Found”，处理这种情况。
 
-调用 userRouter.allowedMethods()
+使用 `app.use(router.allowedMethods()` 注册为中间件。
 
-未匹配到的请求方法，返回 Method not Allowances
+- `allowedMethods` 用于判断某一个 method 或 path 是否支持：
+  - 如果发送的请求，是匹配到 method，，自动返回：“Method Not Allowed”，状态码：405；
+  - 如果发送的请求，是匹配到 path，自动返回：“Not Implemented”，状态码：404；
+
+
+> 【补充】：在一个项目中可以即使用 yarn，又使用 npm，但建议统一用一种包管理工具。
+
+07-Node服务器-Loa\04-koa路由使用.js
+
+```js
+const Koa = require('koa')
+const userRouter = require('./router/user.router')
+
+const app = new Koa()
+
+// 3.注册路由
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
+
+
+app.listen(9000, () => {
+  console.log('koa 服务器启动成功~')
+})
+```
 
 > 【补充】：postman 中 options 请求方法，返回接口路径封装的所有请求方法。
 
-将路由的代码逻辑，封装到独立的文件中，
-
----
-
-Koa 中请求参数解析
-
 > 为 Koa 创建服务器， 注册路由的代码逻辑，封装一个代码片段。
+>
+> C:\Users\00015167\AppData\Roaming\Code\User\snippets\javascript.json
+>
+> ```json
+> {
+>   "koa server": {
+> 		"prefix": "koa-server",
+> 		"body": [
+> 			"const Koa = require('koa')",
+> 			"const KoaRouter = require('@koa/router')",
+> 			"",
+> 			"// 创建 Koa 服务器",
+> 			"const app = new Koa()",
+> 			"",
+> 			"// 创建路由对象",
+> 			"const ${2:router} = new KoaRouter({ prefix: '/${1:users}' })",
+> 			"",
+> 			"// 在路由中，注册中间件",
+> 			"${2:router}.get('/', (ctx, next) => {",
+> 			"  ctx.body = 'user list data~'",
+> 			"})",
+> 			"",
+> 			"// 注册路由",
+> 			"app.use(${2:router}.routes())",
+> 			"app.use(${2:router}.allowedMethods())",
+> 			"",
+> 			"",
+> 			"// 开启 Koa 服务器",
+> 			"app.listen(9000, () => {",
+> 			"  console.log('koa 服务器启动成功~')",
+> 			"})",
+> 			""
+> 		],
+> 		"description": "koa server"
+> 	}
+> }
+> ```
 
-get， post 共五种请求方式的参数解析。
+# 八、Koa 请求参数解析
 
-post 请求 body 请求体中的 json，urlencoded 数据解析。
+## 1.GET 请求
 
-- 安装一个库 koa-bodyparser
-- 再使用 ctx.request.body 中获取。
+07-Node服务器-Loa\05-koa请求参数.js
 
-post 请求 body 请求体中的 form-data 数据解析。
+```js
+const Koa = require('koa')
+const KoaRouter = require('@koa/router')
 
-- 安装一个库，[multer](https://github.com/koajs/multer)、
-- npm install --save @koa/multer multer
+// 创建 Koa 服务器
+const app = new Koa()
 
-早期很多库，都将解析后的信息放在 ctx.req.bocy 中，现在一般放在 ctx.request.body 中。
+// 创建路由对象
+const userRouter = new KoaRouter({ prefix: '/users' })
 
----
+// GET 请求，params 参数获取
+userRouter.get('/:id', (ctx, next) => {
+  const id = ctx.params.id
+  ctx.body = `user ${id} data~`
+})
 
-Koa 文件上传。
+// GET 请求，query 参数获取
+userRouter.get('/', (ctx, next) => {
+  console.log('ctx.query:', ctx.query)
+  // { offset: '20', limit: '10' }
+  ctx.body = `user list data ${JSON.stringify(ctx.query)} ~`
+})
 
-在 ctx.request.file 中，获取文件上传信息。
+// 注册路由
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
 
-多文件上传。
 
-ctx.request.files
+// 开启 Koa 服务器
+app.listen(9000, () => {
+  console.log('koa 服务器启动成功~')
+})
+```
+
+## 2.POST 请求
+
+body 请求体中的 json，x-www-form-urlencoded 数据解析。
+
+安装一个库 [koa-bodyparser](https://github.com/koajs/bodyparser)
+
+```shell
+npm i koa-bodyparser
+```
+
+再使用 `ctx.request.body` 中获取。
+
+```json
+const Koa = require('koa')
+const KoaRouter = require('@koa/router')
+const bodyParser = require('koa-bodyparser')
+
+// 创建 Koa 服务器
+const app = new Koa()
+
+app.use(bodyParser())
+
+// 创建路由对象
+const userRouter = new KoaRouter({ prefix: '/users' })
+
+// POST 请求，json 格式解析
+userRouter.post('/json', (ctx, next) => {
+  // 不要从 ctx.body 中获取数据，这是用来返回结果的
+  console.log('ctx.request.body:', ctx.request.body)
+  // { name: 'zzt', age: 18 }
+  console.log('ctx.req.body:', ctx.req.body)
+  // undefiend
+
+  ctx.body = 'accept user josn data~'
+})
+
+// POST 请求，urlencoded 格式解析
+userRouter.post('/urlencoded', (ctx, next) => {
+  console.log('ctx.request.body:', ctx.request.body)
+  // { name: 'zzt', age: 18 }
+  console.log('ctx.req.body:', ctx.req.body)
+  // undefined
+
+  ctx.body = 'accept user urlencoded data~'
+})
+
+// 注册路由
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
+
+
+// 开启 Koa 服务器
+app.listen(9000, () => {
+  console.log('koa 服务器启动成功~')
+})
+```
+
+> 【注意】：
+>
+> - 不要从 `ctx.body` 中获取数据，这是用来返回结果的
+> - 早期很多库，都将解析后的信息放在 `ctx.req.body` 中，现在一般放在 `ctx.request.body` 中。
+
+body 请求体中的 form-data 数据解析。
+
+安装一个库，[multer](https://github.com/koajs/multer)、
+
+```shell
+npm install --save @koa/multer multer
+```
+
+07-Node服务器-Loa\05-koa请求参数.js
+
+```js
+const Koa = require('koa')
+const KoaRouter = require('@koa/router')
+const multer = require('@koa/multer')
+
+// 创建 Koa 服务器
+const app = new Koa()
+
+const formParser = multer()
+
+// 创建路由对象
+const userRouter = new KoaRouter({ prefix: '/users' })
+
+// POST 请求，formData 解析
+userRouter.post('/formdata', formParser.any(),  (ctx, next) => {
+  console.log('ctx.request.body:', ctx.request.body)
+  // { name: 'zzt', age: '18' }
+  ctx.body = 'accept user formdata data~'
+})
+
+// 注册路由
+app.use(userRouter.routes())
+app.use(userRouter.allowedMethods())
+
+
+// 开启 Koa 服务器
+app.listen(9000, () => {
+  console.log('koa 服务器启动成功~')
+})
+```
+
+# 九、Koa 文件上传
+
+安装一个库 [multer](https://github.com/koajs/multer)
+
+```shell
+npm install --save @koa/multer multer
+```
+
+在 `ctx.request.file` 中，获取单文件上传信息。
+
+在 `ctx.request.files` 中，获取多文件上传信息
+
+```js
+const Koa = require('koa')
+const KoaRouter = require('@koa/router')
+const multer = require('@koa/multer')
+
+// 创建 Koa 服务器
+const app = new Koa()
+
+/* const upload = multer({
+  dest: './uploads'
+}) */
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, cb) {
+      cb(null, './uploads')
+    },
+    filename(req, file, cb) {
+      cb(null, Date.now() + '-' + file.originalname)
+    }
+  })
+})
+
+// 创建路由对象
+const uploadRouter = new KoaRouter({ prefix: '/upload' })
+
+// 在路由中，注册中间件
+uploadRouter.post('/avatar', upload.single('avatar'), (ctx, next) => {
+  console.log('ctx.request.file:', ctx.request.file)
+  ctx.body = '文件上传成功~~'
+})
+
+uploadRouter.post('/photos', upload.array('photos'), (ctx, next) => {
+  console.log('ctx.request.files:', ctx.request.file)
+  ctx.body = '文件上传成功~'
+})
+
+// 注册路由
+app.use(uploadRouter.routes())
+app.use(uploadRouter.allowedMethods())
+
+
+// 开启 Koa 服务器
+app.listen(9000, () => {
+  console.log('koa 服务器启动成功~')
+})
+```
+
+> 【注意】：文件保存的目录，要存在，否则会返回“Not Found”
