@@ -30,7 +30,7 @@ uploadRouter.post('/avatar', upload.single('avatar'), (ctx, next) => {
 })
 
 uploadRouter.post('/photos', upload.array('photos'), (ctx, next) => {
-  console.log('ctx.request.files:', ctx.request.file)
+  console.log('ctx.request.files:', ctx.request.files)
   ctx.body = '文件上传成功~'
 })
 

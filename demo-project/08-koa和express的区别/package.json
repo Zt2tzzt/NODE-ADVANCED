@@ -1,19 +1,17 @@
 {
-  "name": "koa-demo",
+  "name": "koa-compare-express",
   "version": "1.0.0",
   "description": "",
-  "main": "01-koa基本使用.js",
+  "main": "01-express中间件-执行同步.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@koa/multer": "^3.0.2",
     "@koa/router": "^12.0.0",
-    "koa": "^2.14.2",
-    "koa-bodyparser": "^4.4.0",
-    "koa-static": "^5.0.0",
-    "multer": "^1.4.5-lts.1"
+    "axios": "^1.3.5",
+    "express": "^4.18.2",
+    "koa": "^2.14.2"
   }
 }
