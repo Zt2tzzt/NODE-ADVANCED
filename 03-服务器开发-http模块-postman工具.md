@@ -1,4 +1,4 @@
-# 一、Web 服务器是社么？
+# 一、Web 服务器是什么？
 
 当应用程序（客户端）需要某一个资源时，通过 Http 请求，向一台服务器，获取到这个资源；
 
@@ -6,11 +6,12 @@
 
 <img src="NodeAssets/客户端向Web服务器请求资源.jpg" alt="客户端向Web服务器请求资源" style="zoom:150%;" />
 
-目前有很多开源的 Web 服务器：
+目前有很多开源的 Web 服务器，比如：
 
-- 比如 Nginx；
-- 比如 Apache（静态）、Apache Tomcat（静态、动态）；
-- 比如 Node.js
+- Nginx；
+- Apache（静态）
+- Apache Tomcat（静态、动态）；
+- Node.js
 - ...
 
 Nods 有 `http` 模块，通常使用基于该模块的框架（如 _express_、_koa_）开发服务器。
@@ -116,15 +117,15 @@ const server1 = http.createServer((req, res) => {
   res.end('2000 端口的服务器返回的结果~')
 })
 server1.listen(2000, () => {
-  console.log('2000端口对应的服务器启动成功~')
+  console.log('2000 端口对应的服务器启动成功~')
 })
 
 // 2.创建第二个服务器
 const server2 = http.createServer((req, res) => {
-  res.end('3000端口服务器返回的结果~')
+  res.end('3000 端口服务器返回的结果~')
 })
 server2.listen(3000, () => {
-  console.log('3000端口对应的服务器启动成功~')
+  console.log('3000 端口对应的服务器启动成功~')
 })
 ```
 
@@ -136,7 +137,7 @@ server2.listen(3000, () => {
 
 - 比如：创建一个服务器，如果使用浏览器访问，默认会访问两次
 
-  - 一次访问访问开启服务的端口。
+  - 一次访问开启服务的端口。
   - 一次访问 favicon.ico 图标。
 
 - 浏览器没法测试 post 请求。
@@ -153,7 +154,7 @@ npm install nodemon -g
 nodemon xxx.js
 ```
 
-> 【补充】：将创建服务器，开启服务器，的代码，创建一个代码片段。快速生成。
+> 【补充】：将使用 http 模块，创建服务器，开启服务器，的代码，保存一个代码片段。快速生成。
 >
 > C:\Users\MyName\AppData\Roaming\Code\User\snippets\javascript.json
 >
@@ -365,7 +366,7 @@ server.listen(8000, () => {
 
 - 请求路径 `url` 为 `/users`；
 - 请求方式 `method` 为 `POST`；
-- body 请求体中，携带数据 `username`和`password`；
+- body 请求体中，携带数据 `username` 和 `password`；
 
 `reuqest` 对象中，不能直接取到 body 请求体；需要通过监听 `reqest` 的 `"data"` 事件，获取 body 请求体。
 
