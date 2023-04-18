@@ -40,7 +40,7 @@ app.listen(9000, () => {
 
 如果 `response.status` 尚未设置，Koa 会自动将状态设置为 `200` 或 `204`。
 
-请求状态 status
+请求状态 status：
 
 07-Node 服务器-Loa\08-koa 响应结果.js
 
@@ -215,8 +215,8 @@ express 是完整和强大的，其中帮助我们内置了非常多好用的功
 
 koa 是简洁和自由的，它只包含最核心的功能，并不会对使用的其他中间件进行任何限制。
 
-- 甚至是在 app 中连最基本的 get、post 方法，都没有提供；
-- 需要通过 ctx 来判断请求方式和请求路径。
+- 甚至是在 `app` 中连最基本的 `get`、`post` 方法，都没有提供；
+- 需要通过 `ctx` 来判断请求方式和请求路径。
 
 express 和 koa 框架他们的核心都是中间件，它们的核心区别，也在于中间件的使用：
 
@@ -226,8 +226,8 @@ express 和 koa 中间件的执行顺序分析；
 
 koa 中的中间件：
 
-- 在执行同步代码时，只要调用 `next` 方法，就会执行下一个中间件，之后再执行 `next` 方法后面的代码。
-- 在执行异步代码时，不会等到异步代码的结果。如果需要等待结果，在 next 函数调用前，加 `await`。
+- 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，之后再执行 `next` 方法后面的代码。
+- 在执行异步代码时，不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
 
 > 【回顾】：async await 异步函数的原理，生成器。
 
@@ -236,7 +236,7 @@ express 中间件：
 - 在执行同步代码时，与 koa 没有区别。
 - 在执行异步代码时，`next` 函数返回的不是 Promise，使用 `await`；是无效的（**核心区别**）：
   - express 框架设计的初衷，就是同步执行代码，并返回结果，没有考虑异步。
-  - 无法返回到上一个中间件的 `next` 方法调用后，去执行代码。
+  - 如果执行了异步操作，无法返回到上一个中间件的 `next` 方法调用后，去执行代码。
 
 express 执行同步代码：
 
@@ -286,7 +286,7 @@ const app = new Koa()
 // 注册中间件
 app.use((ctx, next) => {
   console.log('koa middleware01')
-  ctx.msg = 'aaa' // 1
+  ctx.msg = 'aaa'
   next()
 
   // 返回结果
@@ -295,19 +295,23 @@ app.use((ctx, next) => {
 
 app.use((ctx, next) => {
   console.log('koa middleware02')
-  ctx.msg += 'bbb' // 2
+  ctx.msg += 'bbb'
   next()
+  ctx.msg += 'ddd'
 })
 
 app.use((ctx, next) => {
   console.log('koa middleware03')
-  ctx.msg += 'ccc' // 3
+  ctx.msg += 'ccc'
 })
 
+
 // 启动服务器
-app.listen(6000, () => {
+app.listen(9000, () => {
   console.log('koa服务器启动成功~')
 })
+
+// 客户端返回的结果："aaabbbcccddd"
 ```
 
 express 执行异步代码：
@@ -318,16 +322,16 @@ express 执行异步代码：
 const express = require('express')
 const axios = require('axios')
 
-// 创建app对象
+// 创建 app 对象
 const app = express()
 
 // 编写中间件
 app.use(async (req, res, next) => {
   console.log('express middleware01')
   req.msg = 'aaa'
-  await next() // await 是无效的，express 中，next 返回的不是 Promise。
+  await next() // 在这里，await 是无效的；express 中，next 返回的不是 Promise。
   // 返回值结果
-  // res.json(req.msg)
+  // res.json(req.msg) 在这里返回结果，下方中间件中的 axios.get 异步操作还没执行。
 })
 
 app.use(async (req, res, next) => {
@@ -342,7 +346,7 @@ app.use(async (req, res, next) => {
   const resData = await axios.get('http://123.207.32.32:8000/home/multidata')
   req.msg += resData.data.data.banner.list[0].title
 
-  // 只能在这里返回结果
+  // 只能在这里返回结果，才是在上方异步操作执行后，返回的。
   res.json(req.msg)
 })
 
@@ -366,7 +370,7 @@ const axios = require('axios')
 const app = new Koa()
 
 // 注册中间件
-// 1.koa的中间件1
+// 1.koa 的中间件1
 app.use(async (ctx, next) => {
   console.log('koa middleware01')
   ctx.msg = 'aaa'
@@ -376,17 +380,17 @@ app.use(async (ctx, next) => {
   ctx.body = ctx.msg
 })
 
-// 2.koa的中间件2
+// 2.koa 的中间件2
 app.use(async (ctx, next) => {
   console.log('koa middleware02')
   ctx.msg += 'bbb'
   // 如果执行的下一个中间件，是一个异步函数, 那么 next 默认不会等到中间件的结果, 就会执行下一步操作
-  // 如果我们希望等待下一个异步函数的执行结果, 那么需要在 next 函数前面加 await；
+  // 如果希望等待下一个异步函数的执行结果, 那么需要在 next 函数前面加 await；
   await next()
   console.log('----')
 })
 
-// 3.koa的中间件3
+// 3.koa 的中间件3
 app.use(async (ctx, next) => {
   console.log('koa middleware03')
   // 网络请求
@@ -407,7 +411,7 @@ app.listen(9000, () => {
 - 中间件处理代码的过程；
 - Response 返回 body 执行的过程；
 
-Koa 执行同步，异步代码，express 执行同步代码时，都适用于洋葱模型。
+Koa 执行同步，异步代码（要用 `await next()`），express 执行同步代码时，都适用于洋葱模型。
 
 express 执行异步代码时，就不适用了。
 

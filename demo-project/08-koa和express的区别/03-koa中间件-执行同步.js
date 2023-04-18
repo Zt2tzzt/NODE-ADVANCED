@@ -17,6 +17,7 @@ app.use((ctx, next) => {
   console.log('koa middleware02')
   ctx.msg += 'bbb'
   next()
+  ctx.msg += 'ddd'
 })
 
 app.use((ctx, next) => {
@@ -30,4 +31,4 @@ app.listen(9000, () => {
   console.log('koa服务器启动成功~')
 })
 
-// 客户端返回的结果："aaabbbccc"
+// 客户端返回的结果："aaabbbcccddd"
