@@ -138,15 +138,17 @@ app.listen(9000, () => {
 
 部署静态资源，可以选择很多方式：
 
-Node 就可以作为静态资源服务器；可以写接口，对客户端的请求进行处理，读取静态资源，并返回给客户端；
+Node 就可以作为静态资源服务器；
 
-也可以使用 express 提供的静态资源中间件：即 `express.static('[静态资源目录]')` 方法，返回的中间件。
+- 可以写接口，对客户端的请求进行处理，读取静态资源，并返回给客户端；
+
+- 也可以使用 express 提供的静态资源中间件：即 `express.static('[静态资源目录]')` 方法，返回的中间件。
 
 :egg: 案例理解：
 
-1.访问服务器中的图片，
+案例1：访问服务器中的图片，
 
-2.将打包好的项目，使用静态资源进行部署，
+案例2：将打包好的项目，使用静态资源进行部署，
 
 - 部署后，直接访问“[主机名+端口号]”，默认会加载 `index.html`;，没找到就会去其它静态资源的目录下找。
 
@@ -188,6 +190,8 @@ app.listen(9000, () => {
 - `res.json({ code: -10001, msg: 'xxx', data: ... })`
 
 在处理错误时，为了使处理过程变得优雅，简洁；通常在一个中间件中，进行错误处理。
+
+- 使用 `next([错误码])` 进入下一个匹配到的中间件，并传递错误码信息，进行错误处理。
 
 06-Node 服务器-express\19-express-错误处理.js
 
@@ -237,7 +241,7 @@ app.listen(9000, () => {
 
 # 四、Koa 是什么？
 
-除了 express，另外一个非常流行的 Node Web 服务器框架就是 Koa。
+除了 express，另外一个非常流行的基于 Node 的 Web 服务器框架就是 Koa。
 
 Koa 官方的定义：generation web framework for node.js；即 node.js 的下一代 web 框架；
 
@@ -267,17 +271,17 @@ _koa_ 注册的中间件（回调函数），提供了两个参数：
 
 - _koa_ 并没有像 _express_ 一样，将 `req` 和 `res` 分开，而是将它们作为 ctx 的属性；
 - `ctx` 代表一次请求的上下文对象；
-- `ctx.request`：获取 Node 的 _http_ 模块封装的请求对象；`ctx.req`：获取 Koa 封装的请求对象。
+- `ctx.request`：获取 Koa 封装的请求对象；`ctx.req`：获取 Node 的 _http_ 模块封装的请求对象。
   - 大部分 `cttx.request` 对象拥有的属性，`ctx` 中也有。
-- `ctx.response`：获取 Node 的 _http_ 模块封装的响应对象；`ctx.res`：获取 koa 封装的响应对象。
+- `ctx.response`：获取 koa 封装的响应对象；`ctx.res`：获取 Node 的 _http_ 模块封装的响应对象。
 
-`next`：本质上是一个异步方法（dispatch），使用三时，类似于 express 的 next，单处理异步代码时有所不同。
+`next`：本质上是一个异步方法（dispatch），使用时，类似于 express 的 `next`，但处理异步代码时，有所不同。
 
-Koa 返回响应数据结果时，可用 `res.end`, `response.end`, `body` 属性赋值.
+Koa 返回响应数据结果时，可用  `response.end`, `res.end`, `body` 属性赋值.
 
-koa 创建服务器，开启服务器，使用中间件
+koa 创建服务器，开启服务器，使用中间件；
 
-koa 中间件无法使用 get、post 这样的方法，进行注册；只能使用 `use` 方法
+koa 中间件无法使用 get、post 这样的方法，进行注册；只能使用 `use` 方法。
 
 安装 Koa
 
@@ -342,7 +346,7 @@ app.listen(9000, () => {
 
 # 六、Koa 中间件
 
-koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用调用像 get，post 这样的方法，或传入路径。
+koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用调用像 `get`，`post` 这样的方法，或传入路径。
 
 Koa 没有提供 methods 的方式，来注册中间件；也没有提供 path 的路径匹配；
 
@@ -438,7 +442,7 @@ module.exports = userRouter
 
 使用 `app.use(router.allowedMethods()` 注册为中间件。
 
-`allowedMethods` 用于判断请求的 method 或 path，服务器是否做了处理。：
+`allowedMethods` 用于判断请求的 method 或 path，服务器是否做了处理：
 
 - 如果发送的请求，未匹配到 method，自动返回：“Method Not Allowed”，状态码：405；
 - 如果发送的请求，未匹配到 path，自动返回：“Not Implemented”，状态码：404；
@@ -689,7 +693,7 @@ uploadRouter.post('/avatar', upload.single('avatar'), (ctx, next) => {
 })
 
 uploadRouter.post('/photos', upload.array('photos'), (ctx, next) => {
-  console.log('ctx.request.files:', ctx.request.file)
+  console.log('ctx.request.files:', ctx.request.files)
   ctx.body = '文件上传成功~'
 })
 
@@ -704,3 +708,4 @@ app.listen(9000, () => {
 ```
 
 > 【注意】：文件保存的目录，要存在，否则会返回“Not Found”
+
