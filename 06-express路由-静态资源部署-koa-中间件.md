@@ -49,7 +49,7 @@ app.listen(9000, () => {
 这个时候，一般使用 `express.Router` 来创建一个路由处理程序：
 
 - 一个 `router` 实例，拥有完整的中间件和路由系统；可以做 app 一样的操作。
-- 因此，它也被称为 迷你应用程序（mini-app）；
+- 因此，它也被称为迷你应用程序（mini-app）；
 
 重构上面的代码，使用路由注册路由中间件：
 
@@ -180,12 +180,12 @@ app.listen(9000, () => {
 
 在处理错误时，返回错误码通常有两种方式：
 
-方式一：设置 http 请求的响应状态码：并返回错误信息
+方式一：设置 http 请求的响应状态码：并返回错误信息，比如：
 
-- `res.status`
-- `res.json`
+- `res.status（400）`
+- `res.json（{ msg: 'err', data: 'xxx' }`
 
-方式二：返回信息，其中包括自定义的错误代码（下面案例采用）。
+方式二：返回信息，其中包括自定义的错误代码（下面案例采用），比如：
 
 - `res.json({ code: -10001, msg: 'xxx', data: ... })`
 
@@ -241,7 +241,7 @@ app.listen(9000, () => {
 
 # 四、Koa 是什么？
 
-除了 express，另外一个非常流行的基于 Node 的 Web 服务器框架就是 Koa。
+除了 express，另外一个非常流行的，基于 Node 的 Web 服务器框架就是 Koa。
 
 Koa 官方的定义：generation web framework for node.js；即 node.js 的下一代 web 框架；
 
