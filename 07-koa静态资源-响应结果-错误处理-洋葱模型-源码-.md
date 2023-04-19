@@ -404,7 +404,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 五、koa 洋葱模型
+# 五、koa 洋葱模型（面试）
 
 洋葱模型，是由社区总结的，用于形象地描述 koa 框架的模型，它两层理解含义：
 
@@ -421,7 +421,7 @@ express 执行异步代码时，不适用洋葱模型。
 
 <img src="NodeAssets/koa洋葱模型.jpg" alt="Koa洋葱模型" style="zoom:60%;" />
 
-# 六、源码理解：
+# 六、express 源码理解
 
 使用 VSCode 自带的 debug，打断点进行调试。
 
