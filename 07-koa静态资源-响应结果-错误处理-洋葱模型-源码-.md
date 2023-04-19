@@ -143,7 +143,7 @@ app.listen(9000, () => {
 
 但是，Koa 中间件中，`next` 函数不接受参数。
 
-而是要使用 `ctx.app`（就是 koa 创建服务器时，返回的 app 对象），本质上是一个 EventEmiter
+而是要使用 `ctx.app`（就是 koa 创建服务器，返回的 app 对象），本质上是一个 EventEmiter
 
 - 产生错误时，可发送一个 `“error”` 事件，并传递错误码和 `ctx` 对象。
 - 使用 app 监听 `“error”` 事件，在一个单独的回调函数中，处理错误。
@@ -192,7 +192,7 @@ app.on('error', (code, ctx) => {
   }
 
   ctx.body = {
-    code: errCode,
+    code,
     msg
   }
 })
@@ -226,8 +226,8 @@ express 和 koa 中间件的执行顺序分析；
 
 koa 中的中间件：
 
-- 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，之后再执行 `next` 方法后面的代码。
-- 在执行异步代码时，不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
+- 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，之后再执行上一个中间件中 `next` 方法后面的代码。
+- 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，如果是异步操作，不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
 
 > 【回顾】：async await 异步函数的原理，生成器。
 
@@ -236,7 +236,7 @@ express 中间件：
 - 在执行同步代码时，与 koa 没有区别。
 - 在执行异步代码时，`next` 函数返回的不是 Promise，使用 `await`；是无效的（**核心区别**）：
   - express 框架设计的初衷，就是同步执行代码，并返回结果，没有考虑异步。
-  - 如果执行了异步操作，无法返回到上一个中间件的 `next` 方法调用后，去执行代码。
+  - 如果执行了异步操作，无法在上一个中间件的 `next` 方法调用后，取到异步结果。
 
 express 执行同步代码：
 
@@ -346,7 +346,7 @@ app.use(async (req, res, next) => {
   const resData = await axios.get('http://123.207.32.32:8000/home/multidata')
   req.msg += resData.data.data.banner.list[0].title
 
-  // 只能在这里返回结果，才是在上方异步操作执行后，返回的。
+  // 只能在这里（异步操作有结果后）返回响应结果，才将上方异步操作结果，放入执行后，返回的。
   res.json(req.msg)
 })
 
@@ -366,7 +366,7 @@ Koa 执行异步代码：
 const Koa = require('koa')
 const axios = require('axios')
 
-// 创建app对象
+// 创建 app 对象
 const app = new Koa()
 
 // 注册中间件
@@ -411,9 +411,13 @@ app.listen(9000, () => {
 - 中间件处理代码的过程；
 - Response 返回 body 执行的过程；
 
-Koa 执行同步，异步代码（要用 `await next()`），express 执行同步代码时，都适用于洋葱模型。
+下列三种情况，适用于洋葱模型：
 
-express 执行异步代码时，就不适用了。
+- Koa 执行同步；
+- koa 执行异步代码（要用 `await next()`）
+- express 执行同步代码时。
+
+express 执行异步代码时，不适用洋葱模型。
 
 <img src="NodeAssets/koa洋葱模型.jpg" alt="Koa洋葱模型" style="zoom:60%;" />
 
@@ -423,7 +427,7 @@ express 执行异步代码时，就不适用了。
 
 express 创建服务器的过程。
 
-http.createServer(this), this 值得就是 app
+源码中，http.createServer(this), this 指得就是 app
 
 app.use(callback), 本质上在做的事：
 
