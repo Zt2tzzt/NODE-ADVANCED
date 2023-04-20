@@ -61,7 +61,7 @@ userRouter.get('/', (ctx, next) => {
   // ctx.body = 'user list data~'
 
   // 2.body 的类型是 buffer
-  // ctx.body= Buffer.from('你好啊，李银河~')
+  // ctx.body = Buffer.from('你好啊，李银河~')
   // 浏览器中，会将返回的结果，作为一个文件下载下来。
   // postman 会将返回的是 buffer / stream 类型，自动使用 utf8 解码。并直接展示
 
@@ -227,7 +227,7 @@ express 和 koa 中间件的执行顺序分析；
 koa 中的中间件：
 
 - 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，之后再执行上一个中间件中 `next` 方法后面的代码。
-- 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，如果是异步操作，不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
+- 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，如果这些代码如果是异步操作，不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
 
 > 【回顾】：async await 异步函数的原理，生成器。
 
@@ -280,29 +280,29 @@ Koa 执行同步代码：
 ```js
 const Koa = require('koa')
 
-// 创建app对象
+// 创建 app 对象
 const app = new Koa()
 
 // 注册中间件
 app.use((ctx, next) => {
   console.log('koa middleware01')
-  ctx.msg = 'aaa'
+  ctx.msg = 'aaa' // 1
   next()
 
   // 返回结果
-  ctx.body = ctx.msg
+  ctx.body = ctx.msg // 5
 })
 
 app.use((ctx, next) => {
   console.log('koa middleware02')
-  ctx.msg += 'bbb'
+  ctx.msg += 'bbb'// 2
   next()
-  ctx.msg += 'ddd'
+  ctx.msg += 'ddd' // 4
 })
 
 app.use((ctx, next) => {
   console.log('koa middleware03')
-  ctx.msg += 'ccc'
+  ctx.msg += 'ccc'// 3
 })
 
 
@@ -427,14 +427,14 @@ express 执行异步代码时，不适用洋葱模型。
 
 express 创建服务器的过程。
 
-源码中，http.createServer(this), this 指得就是 app
+源码中，`http.createServer(this)`, `this` 指得就是 `app`；
 
-app.use(callback), 本质上在做的事：
+`app.use(callback)`, 本质上在做的事：
 
-- callback 保存在数组中，监听网络请求，
-- 根据网络请求，在数组中匹配路径和方法，如果调用 next，执行下一个 callback。
+- `callback` 保存在数组中，监听网络请求，
+- 根据网络请求，在数组中匹配路径和方法，如果调用 `next`，执行下一个 `callback`。
 
-app.use 默认会有一个路由，是整个 app 的路由。
+`app.use` 默认会有一个路由，是整个 `app` 的路由。
 
-将路径，中间件保存在 layer 中，layer 放在 router.stack 中，当监听到请求时，进行匹配。
+将路径，中间件保存在 layer 中，layer 放在 `router.stack` 中，当监听到请求时，进行匹配。
 
