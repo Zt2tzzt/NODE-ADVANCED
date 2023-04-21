@@ -1,6 +1,6 @@
 # 一、Koa 源码分析
 
-Koa 导出的是一个类，名为 `Application`；，用它可创建出实例 `app`。
+Koa 导出的是一个类，名为 `Application`，用它可创建出实例 `app`。
 
 中间件会保存在 `this.middleware` 中；每一个添加的中间件，都被 `push` 到其中。
 
@@ -143,7 +143,7 @@ MySQL 默认存在的数据库有：
 
 # 七、终端操作数据库
 
-在终端创建一个属于自己的新的数据库 `music_db`（一般情况下一个新的项目会对应一个新的数据库）。
+在终端创建一个属于自己的新的数据库 `music_db`（一般情况下一个新的项目，会对应一个新的数据库）。
 
 ```mysql
 CREATE DATABASE music_db;
