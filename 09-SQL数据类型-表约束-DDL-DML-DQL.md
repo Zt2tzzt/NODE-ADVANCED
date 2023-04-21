@@ -22,22 +22,21 @@ MySQL 的数字类型有很多：
 | SMALLINT  | 2               | -32768               | 0                      | 32767                | 65535                  |
 | MEDIUMINT | 3               | -8388608             | 0                      | 8388607              | 16777215               |
 | INT       | 4               | -2147483648          | 0                      | 2147483647           | 4294967295             |
-| BIGINT    | 8               | -2^63^                | 0                      | 2^63^-1               | 2^64^-1                 |
+| BIGINT    | 8               | -2^63^               | 0                      | 2^63^-1              | 2^64^-1                |
 
 浮点数字类型：`FLOAT`，`DOUBLE`：
 
-- FLOAT 是 4 个字节，DOUBLE 是 8 个字节；
+- `FLOAT` 是 4 个字节，`DOUBLE` 是 8 个字节；
 
 精确数字类型：`DECIMAL`，`NUMERIC`：
 
-- DECIMAL 是 NUMERIC 的实现形式；
+- `DECIMAL` 是 `NUMERIC` 的实现形式；
 
-> 【注意】：布尔类型，一般用使用 TINYINT 类型表示，`false` 0， `true` 1。
+> 【注意】：布尔类型，一般使用 `TINYINT` 类型表示，false: 0，true: 1。
 
 常用的是 `INT`、`DOUBLE` 类型。
 
 ## 2.日期类型
-
 
 MySQL 的日期类型很多：
 
@@ -55,14 +54,14 @@ MySQL 的日期类型很多：
 - 用于包含日期和时间部分的值：
 - 支持的范围是：'1000-01-01 00:00:00' 到 '9999-12-31 23:59:59';
 
-`TIMESTAMP` 数据类型，以格式'YYYY-MM-DD hh:mm:ss'显示值；
+`TIMESTAMP` 数据类型，以格式 `YYYY-MM-DD hh:mm:ss` 显示值；
 
 - 被用于同时包含日期和时间部分的值：
 - 但是它的范围，是 UTC 的时间范围：即，'1970-01-01 00:00:01' 到 '2038-01-19 03:14:07';
 
-> 另外：DATETIME 或 TIMESTAMP 值，可以包括在高达微秒（6位）精度的后小数秒一部分（了解）
+> 另外：`DATETIME` 或 `TIMESTAMP` 值，可以包括在高达微秒（6 位）精度的后小数秒一部分（了解）
 >
-> 比如 DATETIME 表示的范围可以是 '1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999';
+> 比如 `DATETIME` 表示的范围可以是 '1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999';
 
 常用的是 `TIMESTAMP` 类型。
 
@@ -81,44 +80,44 @@ MySQL 的字符串类型，表示方式如下：
 - `VARCHAR(20)` 表示 20 个字符的长度。
 - 常用。
 
-`BINARY` 和 `VARBINARY` 类型用于存储二进制字符串，存储的是字节字符串；详见[官方文档](https://dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html)。
+`BINARY` 和 `VARBINARY` 类型，用于存储二进制字符串，存储的是字节字符串；详见[官方文档](https://dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html)。
 
 `BLOB` 类型，用于存储大的二进制文件，如视频；
 
 - 数据库中保存大的二进制文件，没有体现出数据库的优势。
-- 一般把大文件，存储到服务器某个位置，再把路径保存到数据库中。
+- 一般把大文件，存储到服务器某个位置，再把对应的路径保存到数据库中。
 
 `TEXT` 用于存储大的字符串类型，比如文章；
 
 # 二、表约束
 
 主键：`PRIMARY KEY`
+
 - 一张表中，为了区分每一条记录的唯一性，必须有一个字段是永远不会重复，并且不会为空的，通常这个字段会设置为主键：
 - 主键是表中唯一的索引；
-- 主键并且必须是 `NOT NULL` 的，如果没有设置 `NOT NULL`，MySQL 也会隐式的设置为 `NOT NULL`；
+- 主键必须是 `NOT NULL` 的（MySQL 会隐式的设置为 `NOT NULL`）；
 - 主键也可以是多列索引，`PRIMARY KEY(key_part, ...)`，一般称之为联合主键；
 - 主键字段，应该是和业务无关的，尽量不要使用业务字段，来作为主键；
 
-
 唯一：`UNIQUE`
+
 - 某些字段在开发中，我们希望是唯一的，不会重复的，这个字段我们可以使用 UNIQUE 来约束：
   - 比如手机号码、身份证号码等，
 - UNIQUE 约束的字段，在表中必须是不同的；
 - UNIQUE 索引允许 NULL，允许包含的列具有多个 NULL 值；
 
-
 不能为空：`NOT NULL`
+
 - 某些字段，要求必须有值，可以使用 `NOT NULL` 来约束；
 
-
 默认值：`DEFAULT`
-- 某些字段，希望在没有设置值时，给予一个默认值，可以使用 `DEFAULT` 来完成；
 
+- 某些字段，希望在没有设置值时，给予一个默认值，使用 `DEFAULT` 来完成；
 
 自动递增：`AUTO_INCREMENT`
+
 - 某些字段，希望不设置值时，可以进行递增，这个时候可以使用 `AUTO_INCREMENT` 来完成；
 - 比如用户的 id
-
 
 外键约束，也是最常用的一种约束手段，涉及到多表之间的关系
 
@@ -126,7 +125,7 @@ MySQL 的字符串类型，表示方式如下：
 
 ## 1.查看表
 
-``` mysql
+```mysql
 SHOW TABLES;
 ```
 
@@ -249,7 +248,7 @@ UPDATE `t_products` SET price = 8888;
 UPDATE `t_products` SET price = 6666 WHERE id = 6;
 ```
 
-> 【补充】：修改某条数据时，使用最新的修改时间作为记录。
+> 【补充】：修改某条数据时，将最新的修改时间记录下来。
 >
 > ```mysql
 > ALTER TABLE `t_products` ADD updateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
@@ -257,7 +256,7 @@ UPDATE `t_products` SET price = 6666 WHERE id = 6;
 
 # 五、DQL 语句
 
-DQL：Data Query Language（数据查询语言） 
+DQL：Data Query Language（数据查询语言）
 
 SELECT 用于从一个或者多个表中检索选中的行（Record）。
 
@@ -293,21 +292,21 @@ CREATE TABLE IF	NOT EXISTS `products` (
 使用代码插入数据。插入了 108 条数据。
 
 ```js
-const mysql = require('mysql2');
- 
+const mysql = require('mysql2')
+
 const connection = mysql.createConnection({
   host: 'localhost',
   port: 3306,
   user: 'root',
   password: '1016zetian.L.wee1219',
   database: 'music_db'
-});
+})
 
 const statement = `INSERT INTO products SET ?;`
-const phoneJson = require('./phone.json');
+const phoneJson = require('./phone.json')
 
 for (let phone of phoneJson) {
-  connection.query(statement, phone);
+  connection.query(statement, phone)
 }
 ```
 
@@ -372,15 +371,19 @@ SELECT * FROM products WHERE brand IN ('小米', '华为');
 ```
 
 ## 3.模糊查询
-模糊查询，使用 `LIKE` 关键字，结合两个特殊的符号： 
+
+模糊查询，使用 `LIKE` 关键字，结合两个特殊的符号：
+
 - `%` 表示匹配任意个的任意字符；
 - `_` 表示匹配一个的任意字符；
 
 ```mysql
 # 查询所有 title 以 ’v‘ 开头的商品
 SELECT * FROM products WHERE title LIKE 'v%';
+
 # 查询所有 title 带 'v' 的商品.
 SELECT * FROM products WHERE title LIKE '%v%';
+
 # 查询所有 title 第三个字符是 ’M‘/’m‘ 的商品,
 SELECT * FROM products WHERE title LIKE '__m%';
 ```
@@ -389,13 +392,13 @@ SELECT * FROM products WHERE title LIKE '__m%';
 
 ## 4.排序
 
-当查询到结果时，将结果按照某种方式进行排序，这个时候使用的是 `ORDER BY`；有两个常用的值： 
+当查询到结果时，将结果按照某种方式进行排序，这个时候使用的是 `ORDER BY`；有两个常用的值：
 
 - `ASC`：升序排列；
 - `DESC`：降序排列；
 
 ```mysql
-# 询所有的价格小于 1000 的手机, 并且按照评分的降序获取结果
+# 查询所有的价格小于 1000 的手机, 并且按照评分的降序获取结果
 SELECT * FROM products
 	WHERE price < 1000
 	ORDER BY score DESC
@@ -403,12 +406,11 @@ SELECT * FROM products
 
 ## 5.分页
 
-当数据库中的数据非常多时，一次性查询到所有的结果进行显示是不太现实的： 
-- 在真实开发中，都会要求前端传入 `offset`、`limit` 等字段； 
+当数据库中的数据非常多时，一次性查询到所有的结果进行显示是不太现实的：
+
+- 在真实开发中，都会要求前端传入 `offset`、`limit` 等字段；
 - 以便可以在数据库中进行分页查询；
 - 它的用法有 `[LIMIT {[offset,] row_count | row_count OFFSET offset}]`
-
-
 
 ```mysql
 # 没有 `OFFSET` 默认不偏移。
@@ -420,7 +422,3 @@ SELECT * FROM products LIMIT 20 OFFSET 40;
 # 上面 SQL 命令，另外一种写法，阅读性不好。
 SELECT * FROM products LIMIT 40, 20;
 ```
-
-
-
-
