@@ -93,18 +93,19 @@ MySQL 的字符串类型，表示方式如下：
 
 主键：`PRIMARY KEY`
 
-- 一张表中，为了区分每一条记录的唯一性，必须有一个字段是永远不会重复，并且不会为空的，通常这个字段会设置为主键：
-- 主键是表中唯一的索引；
+一张表中，为了区分每一条记录的唯一性，必须有一个字段是永远不会重复，并且不会为空的，通常这个字段会设置为主键：
+
+- 主键是表中唯一 `UNIQUE` 的索引；
 - 主键必须是 `NOT NULL` 的（MySQL 会隐式的设置为 `NOT NULL`）；
 - 主键也可以是多列索引，`PRIMARY KEY(key_part, ...)`，一般称之为联合主键；
 - 主键字段，应该是和业务无关的，尽量不要使用业务字段，来作为主键；
 
 唯一：`UNIQUE`
 
-- 某些字段在开发中，我们希望是唯一的，不会重复的，这个字段我们可以使用 UNIQUE 来约束：
-  - 比如手机号码、身份证号码等，
-- UNIQUE 约束的字段，在表中必须是不同的；
-- UNIQUE 索引允许 NULL，允许包含的列具有多个 NULL 值；
+某些字段在开发中，我们希望是唯一的，不会重复的，这个字段我们可以使用 `UNIQUE` 来约束：比如手机号码、身份证号码等，
+
+- `UNIQUE` 约束的字段，在表中必须是不同的；
+- `UNIQUE` 索引允许 NULL，允许包含的列具有多个 NULL 值；
 
 不能为空：`NOT NULL`
 
@@ -175,6 +176,7 @@ ALTER TABLE `user` RENAME TO `users`;
 
 ```mysql
 ALTER TABLE `users` ADD createTime TIMESTAMP;
+
 ALTER TABLE `users` ADD updateTime TIMESTAMP;
 ```
 
@@ -248,7 +250,7 @@ UPDATE `t_products` SET price = 8888;
 UPDATE `t_products` SET price = 6666 WHERE id = 6;
 ```
 
-> 【补充】：修改某条数据时，将最新的修改时间记录下来。
+> 【补充】：修改某条数据时，将最新的修改时间，保存到 `updateTime` 字段上。
 >
 > ```mysql
 > ALTER TABLE `t_products` ADD updateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
@@ -256,7 +258,7 @@ UPDATE `t_products` SET price = 6666 WHERE id = 6;
 
 # 五、DQL 语句
 
-DQL：Data Query Language（数据查询语言）
+DQL：Data Query Language（数据查询语言）。
 
 SELECT 用于从一个或者多个表中检索选中的行（Record）。
 
@@ -272,7 +274,7 @@ SELECT select_expr [, select_expr]...
 [HAVING where_condition]
 ```
 
-数据准备；
+## 0.数据准备；
 
 创建一个新表。
 
@@ -332,7 +334,7 @@ SELECT id AS pid, brand phonebrand, title, price FROM `products`;
 
 ## 2.条件查询
 
-`WHERE` 查询字句
+`WHERE` 查询字句。
 
 ### 1.比较运算符
 
@@ -346,7 +348,7 @@ SELECT * FROM products WHERE brand != '苹果';
 
 ### 2.逻辑运算符
 
-逻辑与，逻辑或
+逻辑与，逻辑或。
 
 ```mysql
 SELECT * FROM products WHERE brand = '华为' && price < 2000;
@@ -356,7 +358,7 @@ SELECT * FROM products WHERE brand = '华为' || price < 5000;
 SELECT * FROM products WHERE brand = '华为' OR price < 5000;
 ```
 
-区间范围
+区间范围。
 
 ```mysql
 SELECT * FROM products WHERE price >= 1000 && price <= 2000;
