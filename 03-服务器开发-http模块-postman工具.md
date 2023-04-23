@@ -9,9 +9,9 @@
 目前有很多开源的 Web 服务器，比如：
 
 - Nginx；
-- Apache（静态）
+- Apache（静态）；
 - Apache Tomcat（静态、动态）；
-- Node.js
+- Node.js；
 - ...
 
 Nods 有 `http` 模块，通常使用基于该模块的框架（如 _express_、_koa_）开发服务器。
@@ -294,7 +294,7 @@ const server = http.createServer((req, res) => {
   const urlInfo = url.parse(urlString)
   const queryString = urlInfo.query
 
-  // 2.解析 query string: offset=100&size=20
+  // 2.解析 query string: "offset=100&size=20"
 
   // 方式一：
   /* const queryInfo = qs.parse(queryString)
@@ -310,7 +310,7 @@ const server = http.createServer((req, res) => {
   res.end('hello world aaaa bbb')
 })
 
-// 2.开启server服务器
+// 2.开启 server 服务器
 server.listen(8000, () => {
   console.log('服务器开启成功~')
 })
@@ -575,7 +575,7 @@ Http 状态码非常多，可以根据不同的情况，给客户端返回不同
 ```js
 const http = require('http')
 
-// 1.创建server服务器
+// 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   // 响应状态码
   // 1.方式一: statusCode
@@ -611,7 +611,7 @@ Header 设置 `Content-Type `，让客户端以指定的格式和编码处理返
 ```js
 const http = require('http')
 
-// 1.创建server服务器
+// 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   // 设置 header 信息: 数据的类型以及数据的编码格式
   
