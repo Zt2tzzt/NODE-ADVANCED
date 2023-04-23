@@ -69,25 +69,25 @@ MySQL 的日期类型很多：
 
 MySQL 的字符串类型，表示方式如下：
 
-`CHAR` 类型，在创建表时，为固定长度，长度可以是 0 到 255 之间的任何值；
+`CHAR` 类型（用的少），在创建表时，为固定长度，长度可以是 0 到 255 之间的任何值；
 
 - 在被查询时，会删除后面的空格；
-- 用的少。
 
-`VARCHAR` 类型的值，是可变长度的字符串，长度可以指定为 0 到 65535 之间的值；
+`VARCHAR` 类型的值（常用），是可变长度的字符串，长度可以指定为 0 到 65535 之间的值；
 
 - 在被查询时，不会删除后面的空格；
 - `VARCHAR(20)` 表示 20 个字符的长度。
-- 常用。
 
 `BINARY` 和 `VARBINARY` 类型，用于存储二进制字符串，存储的是字节字符串；详见[官方文档](https://dev.mysql.com/doc/refman/8.0/en/binary-varbinary.html)。
+
+`TEXT` 用于存储大的字符串类型，比如文章；
+
+## 4.Blob 类型
 
 `BLOB` 类型，用于存储大的二进制文件，如视频；
 
 - 数据库中保存大的二进制文件，没有体现出数据库的优势。
 - 一般把大文件，存储到服务器某个位置，再把对应的路径保存到数据库中。
-
-`TEXT` 用于存储大的字符串类型，比如文章；
 
 # 二、表约束
 
@@ -120,7 +120,7 @@ MySQL 的字符串类型，表示方式如下：
 - 某些字段，希望不设置值时，可以进行递增，这个时候可以使用 `AUTO_INCREMENT` 来完成；
 - 比如用户的 id
 
-外键约束，也是最常用的一种约束手段，涉及到多表之间的关系
+外键约束，也是最常用的一种约束手段，涉及到多表之间的关系。
 
 # 三、DDL 语句
 
@@ -189,7 +189,7 @@ ALTER TABLE `users` MODIFY updateTime DATETIME;
 修改字段名,并修改类型：
 
 ```mysql
-ALTER TABLE `users` CHANGE createTime createAt DATETIME
+ALTER TABLE `users` CHANGE createTime createAt DATETIME；
 ```
 
 删除字段。
