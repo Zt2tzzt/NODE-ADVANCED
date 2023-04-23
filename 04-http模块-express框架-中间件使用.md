@@ -329,6 +329,7 @@ server.listen(8000, () => {
     <input type="file" />
     <button>上传</button>
 
+    <!-- 引入 axios -->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       const btnEl = document.querySelector('button')
@@ -528,7 +529,8 @@ express 服务器，使用 `app` 或 `router` 对象都可以注册中间件，�
 
 方式二：`app/router.[methods]`；
 
-- `[methods]` 指的是，常用的请求方式；比如：`app.get` 或 `app.post` 等；
+- `[methods]` 指的是，常用的请求方式；
+  - 比如：`app.get` 或 `app.post` 等；
 - `[methods]` 的方式，本质是 `use` 的特殊情况；
 
 ## 1.最普通的中间件
@@ -544,7 +546,7 @@ const app = express()
 
 // 总结: 当 express 服务器，接收到客户端发送的网络请求时, 在所有中间件中，开始进行匹配。
 // 当匹配到第一个符合要求的中间件时，就会执行这个中间件.
-// 后续的中间件是否执行，取决于上一个中间件有没有调用 next 函数
+// 后续的中间件是否执行，取决于上一个中间件有没有调用 next 函数。
 
 // 通过 use 方法注册的中间件：
 // - 是最普通的/简单的中间件
