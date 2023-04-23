@@ -367,7 +367,7 @@ Node.js 中有四种基本流类型：
 - **Readable**：可以从中读取数据的流（例如 `fs.createReadStream()`）。
 - **Writable**：可以向其写入数据的流（例如 `fs.createWriteStream()`）。
 - **Duplex**：同时为 Readable 和 Writable（例如 `net.Socket`）。
-- **Transform**：Duplex 可以在写入和读取数据时修改或转换数据的流（例如 `zlib.createDeflate()`）用于压缩。
+- **Transform**：Duplex 可以在写入和读取数据时，修改或转换数据的流（例如 `zlib.createDeflate()`）用于压缩。
 
 这里我们通过 `fs` 的操作，重点介绍 **Writable**、**Readable**。
 
@@ -386,6 +386,8 @@ Readable 的基本使用：
 04-Node 中的流-Stream\01-可读流的基本使用.js
 
 ```js
+const fs = require('fs')
+
 // 2.通过流读取文件
 const readStream = fs.createReadStream('./aaa.txt', {
   start: 8,
@@ -440,7 +442,7 @@ readStream.on('close', () => {
 
 # 九、Writable 可写流
 
-我们已知可以使用 `fs.writeFile` 来一次性的写入文件；
+我们已知，可以使用 `fs.writeFile` 来一次性的写入文件；
 
 这种方式，相当于一次性将所有的内容，写入到文件中；有很多问题：
 
@@ -469,7 +471,7 @@ fs.writeFile(
 )
 ```
 
-这个时候，使用 `fs.createWriteStream`，传入其中的 options 中，有几个参数，更多参数参考[官网文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatewritestreampath-options)：
+这个时候，使用 `fs.createWriteStream`，在传入其中的 options 中，有几个参数，更多参数参考[官网文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatewritestreampath-options)：
 
 - `flags`：默认是 `w`，如果希望是追加写入，可以使用 `a` 或者 `a+`；
 - `start`：写入的位置；
@@ -533,7 +535,7 @@ writeStream.on('close', () => {
 - 这是因为：写入流在打开后，不会自动关闭；必须手动关闭，来告诉 Node 已经写入结束了；
 - 手动关闭后，Node 会发出一个 `"finish"` 事件的；
 
-写入流有一个常用的方法是 `end`：该方法相当于做了两步操作：
+写入流，有一个常用的方法是 `end`：该方法相当于做了两步操作：
 
 1. 写入传入的数据；
 2. 调用 `close` 方法；
