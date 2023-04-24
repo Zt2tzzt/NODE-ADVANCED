@@ -260,7 +260,7 @@ UPDATE `t_products` SET price = 6666 WHERE id = 6;
 
 DQL：Data Query Language（数据查询语言）。
 
-SELECT 用于从一个或者多个表中检索选中的行（Record）。
+SELECT 用于从一个或者多个表中，检索选中的行（Record）。
 
 查询的格式如下：
 
@@ -300,7 +300,7 @@ const connection = mysql.createConnection({
   host: 'localhost',
   port: 3306,
   user: 'root',
-  password: '1016zetian.L.wee1219',
+  password: 'xxxxx',
   database: 'music_db'
 })
 
