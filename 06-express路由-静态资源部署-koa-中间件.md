@@ -243,11 +243,11 @@ app.listen(9000, () => {
 
 除了 express，另外一个非常流行的，基于 Node 的 Web 服务器框架就是 Koa。
 
-Koa 官方的定义：generation web framework for node.js；即 node.js 的下一代 web 框架；
+Koa 官方的定义："generation web framework for node.js"；即 “node.js 的下一代 web 框架”；
 
-koa 和 express 都出自[那个男人](https://github.com/tj)之手，是由同一个团队开发的新的 Web 框架：
+koa 和 express 都出自 TJ 之手，是由同一个团队开发的 Web 服务器框架：
 
-目前 TJ 的主要精力，也在维护 Koa；express 已经交给团队维护了；
+目前 TJ 的主要精力，在于维护 Koa；至于 express 已经交给团队维护了；
 
 Koa 旨在为 Web 应用程序和 API 提供更轻量、更丰富，更强大的能力；
 
@@ -277,13 +277,13 @@ _koa_ 注册的中间件（回调函数），提供了两个参数：
 
 `next`：本质上是一个异步方法（dispatch），使用时，类似于 express 的 `next`，但处理异步代码时，有所不同。
 
-Koa 返回响应数据结果时，可用  `response.end`, `res.end`, `body` 属性赋值.
+Koa 返回响应数据结果时，可用  `ctx.response.end`, `ctx.res.end`, `ctx.body` 属性赋值.
 
 koa 创建服务器，开启服务器，使用中间件；
 
 koa 中间件无法使用 get、post 这样的方法，进行注册；只能使用 `use` 方法。
 
-安装 Koa
+安装 Koa：
 
 ```shell
 npm install koa
@@ -323,12 +323,12 @@ const app = new Koa()
 
 app.use((ctx, next) => {
   // 1.请求对象
-  console.log('ctx.request:', ctx.request) // 请求对象: Koa 封装的请求对象
-  console.log('ctx.req:', ctx.req) // 请求对象: Node 封装的请求对象
+  console.log('ctx.request:', ctx.request) // 请求对象: Koa 封装的请求对象。
+  console.log('ctx.req:', ctx.req) // 请求对象: Node 封装的请求对象。
 
   // 2.响应结果
-  console.log('ctx.response:', ctx.response) // 响应对象: Koa 封装的响应对象
-  console.log('ctx.res:', ctx.res) // 响应对象: Node 封装的响应对象
+  console.log('ctx.response:', ctx.response) // 响应对象: Koa 封装的响应对象。
+  console.log('ctx.res:', ctx.res) // 响应对象: Node 封装的响应对象。
 
   // 3/其它属性
   console.log('ctx.query:', ctx.query)
@@ -388,7 +388,7 @@ app.listen(9000, () => {
 
 koa 官方并没有提供路由的功能，需要下载第三方库：
 
-有两种选择，都可以：
+有两种选择：
 
 - [koa-router](https://github.com/ZijianHe/koa-router)
 - [router](https://github.com/koajs/router)（项目中使用）
