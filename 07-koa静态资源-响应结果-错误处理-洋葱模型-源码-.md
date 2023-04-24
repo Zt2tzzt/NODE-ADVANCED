@@ -143,7 +143,7 @@ app.listen(9000, () => {
 
 但是，Koa 中间件中，`next` 函数不接受参数。
 
-而是要使用 `ctx.app`（就是 koa 创建服务器，返回的 app 对象），本质上是一个 EventEmiter
+而是要使用 `ctx.app`（就是 koa 创建服务器，返回的 `app` 对象），本质上是一个 EventEmiter
 
 - 产生错误时，可发送一个 `“error”` 事件，并传递错误码和 `ctx` 对象。
 - 使用 app 监听 `“error”` 事件，在一个单独的回调函数中，处理错误。
@@ -414,7 +414,7 @@ app.listen(9000, () => {
 下列三种情况，适用于洋葱模型：
 
 - Koa 执行同步；
-- koa 执行异步代码（要用 `await next()`）
+- koa 执行异步代码（要用 `await next()`）；
 - express 执行同步代码时。
 
 express 执行异步代码时，不适用洋葱模型。
