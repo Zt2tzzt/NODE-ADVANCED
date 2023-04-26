@@ -7,7 +7,7 @@ MySQL 支持的数据类型有：
 - 数字类型；
 - 日期和时间类型；
 - 字符串（字符和字节）类型；
-- 空间类型
+- 空间类型；
 - JSON 数据类型。
 
 ## 1.数字类型
@@ -40,7 +40,7 @@ MySQL 的数字类型有很多：
 
 MySQL 的日期类型很多：
 
-`YEAR` 类型，以 `YYYY` 格式显示值
+`YEAR` 类型，以 `YYYY` 格式显示值：
 
 - 范围 1901 到 2155，和 0000。
 
@@ -54,7 +54,7 @@ MySQL 的日期类型很多：
 - 用于包含日期和时间部分的值：
 - 支持的范围是：'1000-01-01 00:00:00' 到 '9999-12-31 23:59:59';
 
-`TIMESTAMP` 数据类型，以格式 `YYYY-MM-DD hh:mm:ss` 显示值；
+`TIMESTAMP` 数据类型（常用），以格式 `YYYY-MM-DD hh:mm:ss` 显示值；
 
 - 被用于同时包含日期和时间部分的值：
 - 但是它的范围，是 UTC 的时间范围：即，'1970-01-01 00:00:01' 到 '2038-01-19 03:14:07';
@@ -63,17 +63,15 @@ MySQL 的日期类型很多：
 >
 > 比如 `DATETIME` 表示的范围可以是 '1000-01-01 00:00:00.000000' 到 '9999-12-31 23:59:59.999999';
 
-常用的是 `TIMESTAMP` 类型。
-
 ## 3.字符串类型
 
 MySQL 的字符串类型，表示方式如下：
 
-`CHAR` 类型（用的少），在创建表时，为固定长度，长度可以是 0 - 255 之间的任何值；
+`CHAR` 类型（用的少），在创建表时，为固定长度，长度可以是 `0 - 255` 之间的任何值；
 
 - 在被查询时，会删除后面的空格；
 
-`VARCHAR` 类型的值（常用），是可变长度的字符串，长度可以指定为 0 到 65535 之间的值；
+`VARCHAR` 类型的值（常用），是可变长度的字符串，长度可以指定为 `0 - 65535` 之间的值；
 
 - 在被查询时，不会删除后面的空格；
 - `VARCHAR(20)` 表示 20 个字符的长度。
@@ -86,7 +84,7 @@ MySQL 的字符串类型，表示方式如下：
 
 `BLOB` 类型，用于存储大的二进制文件，如视频；
 
-- 数据库中保存大的二进制文件，没有体现出数据库的优势。
+- 在数据库中，保存大的二进制文件，没有体现出数据库的优势。
 - 一般把大文件，存储到服务器某个位置，再把对应的路径保存到数据库中。
 
 # 二、表约束
@@ -118,7 +116,7 @@ MySQL 的字符串类型，表示方式如下：
 自动递增：`AUTO_INCREMENT`
 
 - 某些字段，希望不设置值时，可以进行递增，这个时候可以使用 `AUTO_INCREMENT` 来完成；
-- 比如用户的 id
+- 比如用户的 id。
 
 外键约束，也是最常用的一种约束手段，涉及到多表之间的关系。
 
@@ -158,10 +156,10 @@ CREATE TABLE IF NOT EXISTS `user` (
 ## 3.删除表
 
 ```mysql
-DROP TABLE `user`
+DROP TABLE `user`;
 
 # 更严谨的写法
-DROP TABLE IF EXISTS `user`
+DROP TABLE IF EXISTS `user`;
 ```
 
 ## 4.修改表
@@ -305,6 +303,7 @@ const connection = mysql.createConnection({
 })
 
 const statement = `INSERT INTO products SET ?;`
+
 const phoneJson = require('./phone.json')
 
 for (let phone of phoneJson) {
@@ -390,7 +389,7 @@ SELECT * FROM products WHERE title LIKE '%v%';
 SELECT * FROM products WHERE title LIKE '__m%';
 ```
 
-以上查询条件，不仅仅适用于查询，也适用于修改，删除。
+以上查询条件，不仅仅适用于 DQL 查询语句，也适用于 DML 修改，删除语句。
 
 ## 4.排序
 
@@ -416,7 +415,7 @@ SELECT * FROM products
 
 ```mysql
 # 没有 `OFFSET` 默认不偏移。
-SELECT * FROM products LIMIT 20
+SELECT * FROM products LIMIT 20;
 
 # 完整写法
 SELECT * FROM products LIMIT 20 OFFSET 40;
