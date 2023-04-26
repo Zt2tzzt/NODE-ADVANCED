@@ -104,7 +104,7 @@ Mac 推荐下载 DMG 的版本；在安装过程中，会配置一些环境变�
 
 打开 MySQL 命令行工具。输入配置的密码，即可使用 root 用户，连接到 MySQL.
 
-如果想要在全局命令行，为 MySQL，配置环境变量。
+如果想要在全局命令行使用，需要为 MySQL，配置环境变量。
 
 # 六、终端连接数据库
 
@@ -160,7 +160,7 @@ USE music_db;
 在该数据库中，创建一张表 `user`：
 
 ```mysql
-INSERT TABLE user (
+CREATE TABLE user (
   name varchar(20),
   age int,
   height double
