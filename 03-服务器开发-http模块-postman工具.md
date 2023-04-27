@@ -154,7 +154,7 @@ npm install nodemon -g
 nodemon xxx.js
 ```
 
-> 【补充】：将使用 http 模块，创建服务器，开启服务器，的代码，保存一个代码片段。快速生成。
+> 【补充】：将使用 http 模块，创建服务器，开启服务器的代码，保存一个代码片段。快速生成。
 >
 > C:\Users\MyName\AppData\Roaming\Code\User\snippets\javascript.json
 >
@@ -285,7 +285,7 @@ const http = require('http')
 const url = require('url')
 const qs = require('querystring')
 
-// 1.创建server服务器
+// 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   // 解析 url /home/list?offset=100&size=20
 
@@ -318,7 +318,7 @@ server.listen(8000, () => {
 
 # 七、method 的处理
 
-在 Restful 规范（设计风格）中，对于数据的增删改查，应该通过不同的请求方式：
+在 Restful 规范（设计风格）中，对于数据的增、删、改、查；应该通过不同的请求方式：
 
 - `GET`：查询数据；
 - `POST`：新建数据；
@@ -368,7 +368,9 @@ server.listen(8000, () => {
 - 请求方式 `method` 为 `POST`；
 - body 请求体中，携带数据 `username` 和 `password`；
 
-`reuqest` 对象中，不能直接取到 body 请求体；需要通过监听 `reqest` 的 `"data"` 事件，获取 body 请求体。
+`reuqest` 对象中，不能直接取到 body 请求体；
+
+需要监听 `reqest` 的 `"data"` 事件，获取 body 请求体。
 
 > 【注意】：`request` 对象，本质上是一个 readable 可读流。
 
@@ -521,7 +523,7 @@ server.listen(8000, () => {
 ```js
 const http = require('http')
 
-// 1.创建server服务器
+// 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   // res: response 对象 => 本质是 Writable 可写流
 
@@ -563,7 +565,7 @@ Http 状态码非常多，可以根据不同的情况，给客户端返回不同
 | 500    | Internal Server Error | 服务器出现无法处理的错误                           |
 | 503    | Service Unavailable   | 服务器不可用，可能处于维护或重载状态，暂时无法访问 |
 
-详见 [MDN 响应码解析](https://developer.mozilla.org/zh-CN/docs/web/http/status)
+详见 [MDN 响应码解析](https://developer.mozilla.org/zh-CN/docs/web/http/status)。
 
 设置状态码有两种方式：
 
