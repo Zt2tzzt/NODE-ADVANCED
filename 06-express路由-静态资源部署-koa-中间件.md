@@ -49,7 +49,7 @@ app.listen(9000, () => {
 这个时候，一般使用 `express.Router` 来创建一个路由处理程序：
 
 - 一个 `router` 实例，拥有完整的中间件和路由系统；可以做 app 一样的操作。
-- 因此，它也被称为迷你应用程序（mini-app）；
+- 因此，它也被称为**迷你应用程序（mini-app）**；
 
 重构上面的代码，使用路由注册路由中间件：
 
@@ -175,7 +175,7 @@ app.listen(9000, () => {
 
 - 用户名或密码错误；
 - 用户名或密码没传；
-- 没有传入 token
+- 没有传入 token；
 - ...
 
 在处理错误时，返回错误码通常有两种方式：
@@ -263,25 +263,25 @@ Koa 开发，根据需要，安装和使用中间件；
 
 使用 koa 框架，基于 Node 开发 Web 服务器，过程与 express 类似。
 
-koa 也是通过注册中间件来完成请求处理的；
+*koa* 也是通过注册中间件，来完成请求处理的；
 
 _koa_ 注册的中间件（回调函数），提供了两个参数：
 
 `ctx`：上下文（Context）对象；
 
-- _koa_ 并没有像 _express_ 一样，将 `req` 和 `res` 分开，而是将它们作为 ctx 的属性；
+- _koa_ 并没有像 _express_ 一样，将 `req` 和 `res` 分开，而是将它们作为 `ctx` 的属性；
 - `ctx` 代表一次请求的上下文对象；
-- `ctx.request`：获取 Koa 封装的请求对象；`ctx.req`：获取 Node 的 _http_ 模块封装的请求对象。
-  - 大部分 `cttx.request` 对象拥有的属性，`ctx` 中也有。
+- `ctx.request`：是 Koa 封装的请求对象；`ctx.req`：是 Node 的 _http_ 模块封装的请求对象。
+  - 大部分 `ctx.request` 对象拥有的属性，`ctx` 中也有。
 - `ctx.response`：获取 koa 封装的响应对象；`ctx.res`：获取 Node 的 _http_ 模块封装的响应对象。
 
 `next`：本质上是一个异步方法（dispatch），使用时，类似于 express 的 `next`，但处理异步代码时，有所不同。
 
-Koa 返回响应数据结果时，可用  `ctx.response.end`, `ctx.res.end`, `ctx.body` 属性赋值.
+Koa 返回响应数据结果时，可用 `ctx.response.end`, `ctx.res.end`, `ctx.body` 属性赋值.
 
 koa 创建服务器，开启服务器，使用中间件；
 
-koa 中间件无法使用 get、post 这样的方法，进行注册；只能使用 `use` 方法。
+koa 中间件无法使用 `get`、`post` 这样的方法，进行注册；只能使用 `use` 方法。
 
 安装 Koa：
 
@@ -346,7 +346,7 @@ app.listen(9000, () => {
 
 # 六、Koa 中间件
 
-koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用调用像 `get`，`post` 这样的方法，或传入路径。
+koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用 `get`，`post` 这样的方法，或传入路径。
 
 Koa 没有提供 methods 的方式，来注册中间件；也没有提供 path 的路径匹配；
 
