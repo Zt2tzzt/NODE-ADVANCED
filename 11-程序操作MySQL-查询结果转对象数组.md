@@ -1,11 +1,11 @@
 # 一、MySQL 查询转对象
 数据库驱动。
 
-Node 中的数据库驱动就是 mysql2.
+在 Node 中，常用的**数据库驱动**是 mysql2.
 
 前面我们学习的查询语句，查询到的结果通常是一张表，比如查询手机+品牌信息：
 
-单表查询时，mysql2 会将表转化成数组返回，其中每个元素，是一个个对象，类似于如下形式：
+单表查询时，mysql2 会将表，转化成数组返回，其中，每个元素，是一个个对象，类似于如下形式：
 
 ```json
 [{...}, {...}, {...}, ...]
@@ -40,7 +40,9 @@ SELECT
 		'rank', brands.worldRank,
 		'website', brands.website
 	) AS brand
-FROM products LEFT JOIN brands ON products.brand_id = brands.id;
+FROM products
+LEFT JOIN brands
+	ON products.brand_id = brands.id;
 ```
 
 # 二、MySQL 查询转数组
@@ -53,7 +55,7 @@ FROM products LEFT JOIN brands ON products.brand_id = brands.id;
 使用 mysql2 查询到的是如下形式的数据：
 
 ```json
-[{..., course: [{...}, {...}, {...}, ...]}, {..., course: [{...}, {...}, ...], ...}]
+[{..., course: [{...}, {...}, {...}, ...]}, {..., course: [{...}, {...}, ...], ...}, ...]
 ```
 
 使用如下 SQL 语句查询：
@@ -88,7 +90,7 @@ GROUP BY stu.id;
 
 在 Node 的代码中，执行 SQL 语句呢，可以借助于两个库：
 - *mysql*：最早的 Node 连接 MySQL 的数据库驱动；
-- *mysql2*：在 *mysql* 的基础之上，进行了很多的优化、改进；
+- *mysql2*：在 *mysql* 数据驱动的基础之上，进行了很多的优化、改进；
 
 目前，我更偏向于使用 *mysql2*，它兼容 mysql 的 API，并且提供了一些附加功能。
 
@@ -96,16 +98,8 @@ GROUP BY stu.id;
 
 - 更快/更好的性能；
 - Prepared Statement（预编译语句）：
-  - 提高性能：
-    1. 将创建的语句模块，发送给 MySQL；
-    2. MySQL 编译（解析、优化、转换）语句模块；并且存储它但是不执行；
-    3. 在真正执行时，给“?”提供实际的参数，才会执行；
-    4. 就算多次执行，也只会编译一次，所以性能是更高的；
-  - 防止SQL注入：
-    - 给“?”传入的值，不会像模块引擎那样就编译；
-    - 那么一些 SQL 注入的内容不会被执行；比如：`OR 1 = 1` 不会被执行；
-- 支持 Promise，可以使用 `async` 和 `await` 语法
-- 等等
+- 支持 Promise，可结合 `async` 和 `await` 语法使用。
+- 等等...
 
 > 不论是 Java 还是 Node 中，都提供了数据库相关的接口，库只是对接口功能的实现。
 
@@ -127,7 +121,7 @@ npm install mysql2
 
 - 使用 `connection.query()`；
 - 这里的 `query()` 指的是 “SQL（Structure Query Language）” 中的 “query”；
-- 回调函数中，分别时 `err` 错误信息, `values` 查询到的数据, `fields` 查询的字段；
+- 回调函数中的参数，分别 `err` 错误信息, `values` 查询到的数据, `fields` 查询的字段；
 
 4.销毁连接 `connection.destroy()`
 
@@ -178,10 +172,10 @@ Prepared Statement（预编译语句）有如下优点：
 3. 在真正执行时，给“?”提供实际的参数，才会执行；
 4. 就算多次执行，也只会编译一次，所以性能是更高的；
 
-优点二：防止SQL注入：
+优点二：防止 SQL 注入：
 
-- 给“?”传入的值，不会像模块引擎那样就编译；
-- 那么一些 SQL 注入的内容不会被执行；比如：`OR 1 = 1` 不会被执行；
+- 给“?”传入的值，不会像模块引擎那样被编译；
+- 那么，一些 SQL 注入的内容不会被执行；比如：`OR 1 = 1` 就不会被执行；
 
 使用步骤：
 
@@ -217,7 +211,7 @@ connection.execute(statement, [1000, 8], (err, values) => {
 
 > 【补充】：SQL 注入是什么？
 >
-> 比如再登录 admin 帐号时，
+> 比如在登录 admin 帐号时，
 >
 > 如果后端程序，直接在 SQL 上，拼接前端传过来的参数。
 >
@@ -225,7 +219,7 @@ connection.execute(statement, [1000, 8], (err, values) => {
 >
 > 这样，条件永远为真，总是能查询出数据。
 >
-> 预处理语句可以有效防止这种情况。
+> 预处理语句，可以有效防止这种情况。
 
 ## 3.连接池
 
@@ -235,7 +229,7 @@ connection.execute(statement, [1000, 8], (err, values) => {
 
 事实上，mysql2 给我们提供了**连接池（connection pools）**；
 
-可以在需要的时候自动创建连接，并且创建的连接不会被销毁，而是放到连接池中，仍然可以继续使用；
+可以在需要的时候，自动创建连接，并且创建的连接不会被销毁，而是放到连接池中，仍然可以继续使用；
 
 可以在创建连接池的时候，设置 `connectionLimit`，也就是最大创建个数；
 
@@ -269,7 +263,10 @@ connectionPool.execute(statement, [1000, 0], (err, values) => {
 
 mysql2 支持使用 Promise 的形式，查询数据。
 
-返回的结果 `res` 是一个数组，`res[0]: values`，`res[1]: fields`；
+返回的结果 `res` 是一个数组
+
+- `res[0]: values` 表示查询到的数据；
+- `res[1]: fields` 表示查询到的数据中的字段；
 
 09-mySQL\05-mysql2-Promise写法.js
 
