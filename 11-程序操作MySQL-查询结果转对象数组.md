@@ -17,7 +17,7 @@ SELECT * FROM products LEFT JOIN brand ON products.brand_id = brand.id;
 
 多表查询时，同样的，mysql2 也会将表转化成数组返回，其中每个元素，是一个个对象。
 
-- 但是，我们往往希望 LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
+- 但是，我们往往希望，LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
 - 使用 `JSON_OBJECT('[属性名]', [字段名])`
 
 ```json
@@ -120,7 +120,7 @@ npm install mysql2
 - 这里的 `query()` 指的是 “SQL（Structure Query Language）” 中的 “query”；
 - 回调函数中的参数，分别 `err` 错误信息, `values` 查询到的数据, `fields` 查询的字段；
 
-4.销毁连接 `connection.destroy()`
+4.销毁连接 `connection.destroy()`；
 
 09-mySQL\02-mysql2-基本使用.js
 
@@ -172,7 +172,7 @@ Prepared Statement（预编译语句）有如下优点：
 优点二：防止 SQL 注入：
 
 - 给“?”传入的值，不会在模块引擎中被编译；
-- 那么，一些 SQL 注入的内容不会被执行；比如：`OR 1 = 1` 就不会被执行；
+- 那么，一些 SQL 注入的内容，就不会被执行；比如：`OR 1 = 1`。
 
 使用步骤：
 
