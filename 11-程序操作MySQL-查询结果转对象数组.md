@@ -1,9 +1,7 @@
 # 一、MySQL 查询转对象
-数据库驱动。
-
 在 Node 中，常用的**数据库驱动**是 mysql2.
 
-前面我们学习的查询语句，查询到的结果通常是一张表，比如查询手机+品牌信息：
+前面编写的查询语句，查询到的结果，通常是一张表，比如查询“手机+品牌”的信息：
 
 单表查询时，mysql2 会将表，转化成数组返回，其中，每个元素，是一个个对象，类似于如下形式：
 
@@ -19,7 +17,7 @@ SELECT * FROM products LEFT JOIN brand ON products.brand_id = brand.id;
 
 多表查询时，同样的，mysql2 也会将表转化成数组返回，其中每个元素，是一个个对象。
 
-- 但是，我们往往希望 LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回。
+- 但是，我们往往希望 LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
 - 使用 `JSON_OBJECT('[属性名]', [字段名])`
 
 ```json
@@ -68,8 +66,7 @@ SELECT
 	JSON_ARRAYAGG(
 		JSON_OBJECT(
 			'id', cs.id,
-			'name',
-			cs.name
+			'name', cs.name
 		)
 	) AS courses
 FROM students stu
@@ -84,28 +81,28 @@ GROUP BY stu.id;
 
 # 三、mysql2 是什么
 
-在 GUI 工具中，通过执行 SQL 语句，可以获取结果；
+在 GUI 工具中，通过执行 SQL 语句，可以获取执行结果；
 
 在真实开发中，是通过代码来完成所有的操作的。
 
-在 Node 的代码中，执行 SQL 语句呢，可以借助于两个库：
+在 Node 的代码中，要执行 SQL 语句，需要使用**数据库驱动**，可以借助于两个库：
 - *mysql*：最早的 Node 连接 MySQL 的数据库驱动；
 - *mysql2*：在 *mysql* 数据驱动的基础之上，进行了很多的优化、改进；
 
-目前，我更偏向于使用 *mysql2*，它兼容 mysql 的 API，并且提供了一些附加功能。
+目前，我更偏向于使用 *mysql2*，因为它兼容 mysql 的 API，并且提供了一些附加功能。
 
 *mysql2* 有如下优势：
 
-- 更快/更好的性能；
+- 更好的性能；
 - Prepared Statement（预编译语句）：
-- 支持 Promise，可结合 `async` 和 `await` 语法使用。
+- 支持 Promise；
 - 等等...
 
 > 不论是 Java 还是 Node 中，都提供了数据库相关的接口，库只是对接口功能的实现。
 
 # 四、mysql2 使用
 
-安装 mysql2：
+安装 *mysql2*：
 
 ```shell
 npm install mysql2
@@ -168,13 +165,13 @@ Prepared Statement（预编译语句）有如下优点：
 优点一：提高性能：
 
 1. 将创建的语句模块，发送给 MySQL；
-2. MySQL 编译（解析、优化、转换）语句模块；并且存储它，但是不执行；
-3. 在真正执行时，给“?”提供实际的参数，才会执行；
+2. MySQL 编译（解析、优化、转换）语句模块；并且存储它，但不执行；
+3. 给“?”提供实际的参数后，才会执行；
 4. 就算多次执行，也只会编译一次，所以性能是更高的；
 
 优点二：防止 SQL 注入：
 
-- 给“?”传入的值，不会像模块引擎那样被编译；
+- 给“?”传入的值，不会在模块引擎中被编译；
 - 那么，一些 SQL 注入的内容不会被执行；比如：`OR 1 = 1` 就不会被执行；
 
 使用步骤：
@@ -183,7 +180,7 @@ Prepared Statement（预编译语句）有如下优点：
 
 2.使用 `connection.execute(statement, [[条件1], [条件2], ...])`
 
-3.销毁连接 `connection.distroy()`
+3.销毁连接 `connection.destroy()`
 
 09-mySQL\03-mysql2-连接池.js
 
@@ -223,7 +220,9 @@ connection.execute(statement, [1000, 8], (err, values) => {
 
 ## 3.连接池
 
-前面仅仅是创建了一个连接（connection），如果同时有多个请求的话，连接很有可能正在被占用，
+前面的案例中，Node 程序，仅仅是创建了一个数据库连接（`connection`）；
+
+如果要同时处理有多个请求的话，连接很有可能正在被占用。
 
 那么，是否需要每来一个请求，都去创建一个新的连接呢？
 
@@ -261,7 +260,7 @@ connectionPool.execute(statement, [1000, 0], (err, values) => {
 
 ## 4.Promise
 
-mysql2 支持使用 Promise 的形式，查询数据。
+mysql2 支持使用 Promise 的形式，查询数据。可结合 `async` 和 `await` 语法使用。
 
 返回的结果 `res` 是一个数组
 
