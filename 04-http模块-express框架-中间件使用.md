@@ -178,7 +178,7 @@ server.listen(8000, () => {
 由上述案例可知，
 
 - 如果上传的图片比较小时，可一次性读取完；
-- 如果上传的图片比较大时，会分成几次读取。上面的案例中，就分成了四次。
+- 如果上传的图片比较大时，会分成几次读取（上面的案例中，就分成了四次）。
 
 但保存下来的文件，无法打开；
 
@@ -333,6 +333,7 @@ server.listen(8000, () => {
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       const btnEl = document.querySelector('button')
+      
       btnEl.onclick = function () {
         // 创建表单对象
         const formData = new FormData()
