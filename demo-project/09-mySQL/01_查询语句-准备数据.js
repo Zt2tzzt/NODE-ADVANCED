@@ -5,7 +5,7 @@ const connection = mysql.createConnection({
   port: 3306,
   user: 'root',
   password: '1016zetian.L.wee1219',
-  database: 'music_db'
+  database: 'demo_db'
 });
 
 const statement = `INSERT INTO products SET ?;`

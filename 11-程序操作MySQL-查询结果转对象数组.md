@@ -1,23 +1,24 @@
 # 一、MySQL 查询转对象
-在 Node 中，常用的**数据库驱动**是 mysql2.
+
+在 Node 中，常用的**数据库驱动**是 _mysql2_.
 
 前面编写的查询语句，查询到的结果，通常是一张表，比如查询“手机+品牌”的信息：
 
-单表查询时，mysql2 会将表，转化成数组返回，其中，每个元素，是一个个对象，类似于如下形式：
+单表查询时，mysql2 会将查询到的表中的记录，转化成数组返回，其中，每个元素，是一个个对象，类似于如下形式：
 
 ```json
 [{...}, {...}, {...}, ...]
 ```
 
-使用如下 SQL 语句查询：
+可使用如下 SQL 语句查询：
 
 ```mysql
 SELECT * FROM products LEFT JOIN brand ON products.brand_id = brand.id;
 ```
 
-多表查询时，同样的，mysql2 也会将表转化成数组返回，其中每个元素，是一个个对象。
+多表查询时，同样的，_mysql2_ 也会将表转化成数组返回，其中每个元素，是一个个对象。
 
-- 但是，我们往往希望，LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
+- 但是，多表查询时，往往希望，LEFT JOIN 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
 - 使用 `JSON_OBJECT('[属性名]', [字段名])`
 
 ```json
@@ -46,9 +47,10 @@ LEFT JOIN brands
 # 二、MySQL 查询转数组
 
 在多对多关系中，我们希望查询到的是一个数组：
-- 比如一个学生的多门课程信息，应该是放到一个数组中的；
+
+- 比如一个学生的多门选课信息，应该是放到一个数组中的；
 - 数组中存放的是课程信息的一个个对象；
-- 这个时候我们要 `JSON_ARRAYAGG()` 和 `JSON_OBJECT()` 结合来使用；
+- 这个时候要将 `JSON_ARRAYAGG()` 和 `JSON_OBJECT()` 结合来使用；
 
 使用 mysql2 查询到的是如下形式的数据：
 
@@ -81,17 +83,18 @@ GROUP BY stu.id;
 
 # 三、mysql2 是什么
 
-在 GUI 工具中，通过执行 SQL 语句，可以获取执行结果；
+在 GUI 工具（如 Navicat）中，通过执行 SQL 语句，可以获取执行结果；
 
 在真实开发中，是通过代码来完成所有的操作的。
 
 在 Node 的代码中，要执行 SQL 语句，需要使用**数据库驱动**，可以借助于两个库：
-- *mysql*：最早的 Node 连接 MySQL 的数据库驱动；
-- *mysql2*：在 *mysql* 数据驱动的基础之上，进行了很多的优化、改进；
 
-目前，我更偏向于使用 *mysql2*，因为它兼容 mysql 的 API，并且提供了一些附加功能。
+- _mysql_：最早的 Node 连接 MySQL 的数据库驱动；
+- _mysql2_：在 _mysql_ 数据驱动的基础上，进行了很多的优化、改进；
 
-*mysql2* 有如下优势：
+_mysql2_ 兼容 mysql 的 API，并且提供了一些附加功能，案例中使用该库。
+
+_mysql2_ 有如下优势：
 
 - 更好的性能；
 - Prepared Statement（预编译语句）：
@@ -102,7 +105,7 @@ GROUP BY stu.id;
 
 # 四、mysql2 使用
 
-安装 *mysql2*：
+安装 _mysql2_：
 
 ```shell
 npm install mysql2
@@ -153,7 +156,6 @@ connection.query(statement, (err, values, fields) => {
     { id: 4, name: 'lucy', age: 16 },
     { id: 5, name: 'lily', age: 20 }
   ] */
-
   connection.destroy()
 })
 ```
@@ -171,7 +173,7 @@ Prepared Statement（预编译语句）有如下优点：
 
 优点二：防止 SQL 注入：
 
-- 给“?”传入的值，不会在模块引擎中被编译；
+- 给“?”传入的值，不会在模块引擎中编译；
 - 那么，一些 SQL 注入的内容，就不会被执行；比如：`OR 1 = 1`。
 
 使用步骤：
@@ -267,7 +269,7 @@ mysql2 支持使用 Promise 的形式，查询数据。可结合 `async` 和 `aw
 - `res[0]: values` 表示查询到的数据；
 - `res[1]: fields` 表示查询到的数据中的字段；
 
-09-mySQL\05-mysql2-Promise写法.js
+09-mySQL\05-mysql2-Promise 写法.js
 
 ```js
 const mysql2 = require('mysql2')
@@ -300,6 +302,6 @@ connectionPool
 >
 > Node 中，其它流行的 http 服务框架：
 >
-> *egg.js* 基于 Koa
+> _egg.js_ 基于 Koa
 >
-> *nest.js* 类似于 Java 的 Spring 框架，要使用 Typescript 开发。
+> _nest.js_ 类似于 Java 的 Spring 框架，要使用 Typescript 开发。
