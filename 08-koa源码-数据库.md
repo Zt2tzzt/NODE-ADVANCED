@@ -222,9 +222,7 @@ INSERT INTO user (
 
 我们希望操作数据库（特别是在程序中），就需要有和数据库沟通的语言，这个语言就是 SQL：
 
-SQL 是"Structured Query Language"，称之为结构化查询语言，简称 SQL；
-
-使用 SQL 编写出来的命令语句，就称之为 SQL 语句；
+SQL 全称是"Structured Query Language"，称之为结构化查询语言，简称 SQL；
 
 SQL 语句可以用于对数据库进行操作；
 
@@ -234,7 +232,7 @@ SQL 语句的常用规范：
 
 - 关键字通常使用大写，比如 `CREATE`、`TABLE`、`SHOW`、...；
 - 一条语句结束后，需要以 `;` 结尾；
-- 如果遇到关键字作为表名或者字段名称，要使用 `` 包裹;
+- 如果遇到关键字，作为表名或者字段名称，要使用 `` 包裹;
 
 # 十、SQL 语句分类
 
@@ -242,7 +240,7 @@ SQL 语句的常用规范：
 
 **DDL（Data Definition Language）**：数据定义语言；
 
-- 对数据库或者表，进行创建、删除、修改等操作；
+- 对数据库，或者表，进行创建、删除、修改等操作；
 
 **DML（Data Manipulation Language）**：数据操作语言；
 
