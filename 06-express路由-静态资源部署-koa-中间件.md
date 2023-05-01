@@ -39,12 +39,12 @@ app.listen(9000, () => {
 其中，有些处理逻辑，其实是一个整体，应该将它们放在一起：
 
 - 比如，对 users 相关的处理，其中包括：
-  - 获取用户列表；
-  - 获取某一个用户信息；
-  - 创建一个新的用户；
-  - 删除一个用户；
-  - 更新一个用户；
-  - ...
+- 获取用户列表；
+- 获取某一个用户信息；
+- 创建一个新的用户；
+- 删除一个用户；
+- 更新一个用户；
+- ...
 
 这个时候，一般使用 `express.Router` 来创建一个路由处理程序：
 
@@ -150,7 +150,7 @@ Node 就可以作为静态资源服务器；
 
 案例2：将打包好的项目，使用静态资源进行部署：
 
-- 部署后，直接访问“[主机名+端口号]”，默认会加载 `index.html`；没找到就会去其它静态资源的目录下找。
+- 部署后，直接访问“[主机名+端口号]”，默认会加载 `index.html`；如果没找到，就会去其它静态资源的目录下找。
 
 06-Node 服务器-express\18-express-静态资源服务器.js
 
@@ -241,7 +241,7 @@ app.listen(9000, () => {
 
 # 四、Koa 是什么？
 
-除了 express，另外一个非常流行的，基于 Node 的 Web 服务器框架就是 Koa。
+除了 express 框架，另外一个，非常流行的，基于 Node 的 Web 服务器框架，就是 Koa。
 
 Koa 官方的定义："generation web framework for node.js"；即 “node.js 的下一代 web 框架”；
 
@@ -251,7 +251,7 @@ koa 和 express 都出自 TJ 之手，是由同一个团队开发的 Web 服务�
 
 Koa 旨在为 Web 应用程序和 API 提供更轻量、更丰富，更强大的能力；
 
-相对于 express 具有更强的**异步处理能力**（后续会对比）；
+相对于 express 来说，Koa 具有更强的**异步处理能力**（后续会对比）；
 
 Koa 的核心代码只有 1600+ 行，是一个更加轻量级的框架；
 
@@ -346,9 +346,9 @@ app.listen(9000, () => {
 
 # 六、Koa 中间件
 
-koa 注册中间件，只能通过 `qpp.use` 方法：且只能传入回调函数，不能使用 `get`，`post` 这样的方法，或传入路径。
+koa 注册中间件，只能通过 `app.use` 方法：且只能传入回调函数，不能使用 `get`，`post` 这样的方法，或传入路径。
 
-Koa 没有提供 methods 的方式，来注册中间件；也没有提供 path 的路径匹配；
+Koa 没有提供 methods 的方式，也没有提供 path 的路径匹配，来注册中间件；
 
 那么如何将 path 和 method 分离呢？
 
@@ -436,11 +436,11 @@ module.exports = userRouter
 
 让路由生效。
 
-使用 `app.use(router.routes())` 注册路由。
+1.使用 `app.use(router.routes())` 注册路由。
 
 在 Koa 中，任何没有匹配到的请求，默认都会返回“Not Found”，处理这种情况。
 
-使用 `app.use(router.allowedMethods()` 注册为中间件。
+2.使用 `app.use(router.allowedMethods()` 注册为中间件。
 
 `allowedMethods` 用于判断请求的 method 或 path，服务器是否做了处理：
 
