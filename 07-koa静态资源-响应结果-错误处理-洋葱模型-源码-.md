@@ -8,7 +8,7 @@ koa 并没有内置部署相关的功能；
 npm install koa-static
 ```
 
-部署的过程类似于 express：
+部署静态资源的过程，类似于 express：
 
 07-Node 服务器-Loa\07-koa 静态资源服务器.js
 
@@ -32,15 +32,16 @@ app.listen(9000, () => {
 
 响应输出结果时：可将 body 响应主体，设置为以下之一：
 
+- Object | Array：对象或者数组。
 - string：字符串数据。
 - Buffer：Buffer 数据。
 - Stream：流数据。
-- Object | Array：对象或者数组。
+
 - null：不输出任何内容；
 
 如果 `response.status` 尚未设置，Koa 会自动将状态设置为 `200` 或 `204`。
 
-请求状态 status：
+设置请求状态，使用 `ctx.status`：
 
 07-Node 服务器-Loa\08-koa 响应结果.js
 
@@ -62,15 +63,18 @@ userRouter.get('/', (ctx, next) => {
 
   // 2.body 的类型是 buffer
   // ctx.body = Buffer.from('你好啊，李银河~')
+  
   // 浏览器中，会将返回的结果，作为一个文件下载下来。
   // postman 会将返回的是 buffer / stream 类型，自动使用 utf8 解码。并直接展示
 
   // 3.body 的类型是 stream
   // 设置返回的 stream 的类型，默认是文本类型，设置为 image/jpeg，表示图片。
   // 一般不用这么做，部署静态资源服务器即可。
+  
   // const readStream = fs.createReadStream('./uploads/1668331072032_kobe02.png')
   // ctx.type = 'image/jpeg'
   // ctx.body = readStream
+  
   // postman，浏览器中，直接展示图片，相当于访问静态资源。
 
   // 4.body 的类型是数据 object | array，用的最多。
@@ -178,6 +182,7 @@ app.use(userRouter.allowedMethods())
 app.on('error', (code, ctx) => {
   const errCode = code
   let msg = ''
+  
   switch (errCode) {
     case -1001:
       msg = '帐号或密码错误~'
@@ -226,8 +231,10 @@ express 和 koa 中间件的执行顺序分析；
 
 koa 中的中间件：
 
-- 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，之后再执行上一个中间件中 `next` 方法后面的代码。
-- 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，如果这些代码是异步操作，默认不会等到异步代码的结果。如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
+- 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码；
+  - 之后再执行上一个中间件中 `next` 方法后面的代码。
+- 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，
+  - 下一个中间件的代码，是异步操作，默认不会等到异步代码的结果；就会回到上一个中间件中，执行 `next()` 后方的代码；如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
 
 > 【回顾】：async await 异步函数的原理，生成器。
 
