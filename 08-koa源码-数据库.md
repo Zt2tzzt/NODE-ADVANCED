@@ -170,25 +170,9 @@ CREATE TABLE user (
 在该表中，在插入数据：
 
 ```mysql
-INSERT INTO user (
-  name,
-  age,
-  height
-) values (
-  'zzt',
-  18,
-  1.88
-);
+INSERT INTO user (name, age, height) values ('zzt', 18, 1.88);
 
-INSERT INTO user (
-  name,
-  age,
-  height
-) values (
-  'kobe',
-  40,
-  1.98
-);
+INSERT INTO user (name, age, height) values ('kobe', 40, 1.98);
 ```
 
 > MySQL 命令，只要不写分号，就可以换行。
