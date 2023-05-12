@@ -85,7 +85,7 @@ MySQL 的字符串类型，表示方式如下：
 `BLOB` 类型，用于存储大的二进制文件，如视频；
 
 - 在数据库中，保存大的二进制文件，没有体现出数据库的优势。
-- 一般把大文件，存储到服务器某个位置，再把对应的路径保存到数据库中。
+- 一般把大文件，存储到服务器某个位置，再把文件信息保存到数据库中。
 
 # 二、表约束
 
@@ -95,7 +95,7 @@ MySQL 的字符串类型，表示方式如下：
 
 - 主键是表中唯一 `UNIQUE` 的索引；
 - 主键必须是 `NOT NULL` 的（MySQL 会隐式的设置为 `NOT NULL`）；
-- 主键也可以是多列索引，`PRIMARY KEY(key_part, ...)`，一般称之为联合主键；
+- 主键也可以是多列索引，`PRIMARY KEY(key_part, ...)`，一般称之为**联合主键**；
 - 主键字段，应该是和业务无关的，尽量不要使用业务字段，来作为主键；
 
 唯一：`UNIQUE`
@@ -256,7 +256,7 @@ UPDATE `t_products` SET price = 6666 WHERE id = 6;
 
 # 五、DQL 语句
 
-DQL：Data Query Language（数据查询语言）。
+**DQL：Data Query Language**（数据查询语言）。
 
 SELECT 用于从一个或者多个表中，检索选中的行（Record）。
 
@@ -290,6 +290,8 @@ CREATE TABLE IF	NOT EXISTS `products` (
 ```
 
 使用代码插入数据。插入了 108 条数据。
+
+demo-project\09-mySQL\01_查询语句-准备数据.js
 
 ```js
 const mysql = require('mysql2')
