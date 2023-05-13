@@ -1,8 +1,10 @@
-# 一、MySQL 查询转对象
+# 程序操作MySQL & 查询结果转对象数组
+
+## 一、MySQL 查询转对象
 
 在 Node 中，常用的**数据库驱动**是 _mysql2_.
 
-## 1.单表查询
+### 1.单表查询
 
 单表查询时，查询到的结果，通常是一张表，比如查询“手机”的信息：
 
@@ -18,7 +20,7 @@ mysql2 会将查询到的表中的记录，转化成数组返回，其中，每�
 SELECT * FROM products
 ```
 
-## 2.多表查询
+### 2.多表查询
 
 多表查询时，查询到的结果，通常是多张表，比如查询“手机+品牌”的信息：
 
@@ -27,18 +29,20 @@ SELECT * FROM products
 - 但是，多表查询时，往往希望，`LEFT JOIN` 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
 - 这时，要使用 `JSON_OBJECT('[属性名]', [字段名])` 函数。
 
+希望返回的格式：
+
 ```json
 [
   {...,
-   brand: {...}
+    brand: {...}
   },
   {...,
-   brand: {...}
-	},
-	{...,
-   brand: {...}
-	},
-	...
+    brand: {...}
+  },
+  {...,
+    brand: {...}
+  },
+  ...
 ]
 ```
 
@@ -47,21 +51,21 @@ SELECT * FROM products
 ```mysql
 SELECT
   products.id AS id,
-	products.title AS title,
-	products.price AS price,
-	products.score AS score,
-	JSON_OBJECT(
-		'id', brands.id,
-		'name', brands.name,
-		'rank', brands.worldRank,
-		'website', brands.website
-	) AS brand
+  products.title AS title,
+  products.price AS price,
+  products.score AS score,
+  JSON_OBJECT(
+    'id', brands.id,
+    'name', brands.name,
+    'rank', brands.worldRank,
+    'website', brands.website
+  ) AS brand
 FROM products
 LEFT JOIN brands
-	ON products.brand_id = brands.id;
+  ON products.brand_id = brands.id;
 ```
 
-# 二、MySQL 查询转数组
+## 二、MySQL 查询转数组
 
 在多对多关系中，我们希望查询到的是一个数组：
 
@@ -74,13 +78,13 @@ LEFT JOIN brands
 ```json
 [
   {...,
-   course: [
-   	 {...}, {...}, {...}, ...]
-   },
+    course: [
+      {...}, {...}, {...}, ...]
+    },
   {...,
-   course: [
-  	 {...}, {...}, ...], ...]
-   },
+    course: [
+      {...}, {...}, ...], ...]
+    },
   ...
 ]
 ```
@@ -89,26 +93,26 @@ LEFT JOIN brands
 
 ```mysql
 SELECT
-	stu.id,
-	stu.name,
-	stu.age,
-	JSON_ARRAYAGG(
-		JSON_OBJECT(
-			'id', cs.id,
-			'name', cs.name
-		)
-	) AS courses
+  stu.id,
+  stu.name,
+  stu.age,
+  JSON_ARRAYAGG(
+    JSON_OBJECT(
+      'id', cs.id,
+      'name', cs.name
+    )
+  ) AS courses
 FROM students stu
 LEFT JOIN students_select_courses ssc
-	ON stu.id = ssc.student_id
+  ON stu.id = ssc.student_id
 LEFT JOIN courses cs
-	ON ssc.course_id = cs.id
+  ON ssc.course_id = cs.id
 GROUP BY stu.id;
 ```
 
 > 以上两种方式，虽然可以通过代码处理，但 MySQL 已提供了函数，更加方便。
 
-# 三、mysql2 是什么
+## 三、mysql2 是什么
 
 在 GUI 工具（如 Navicat）中，通过执行 SQL 语句，可以获取执行结果；
 
@@ -130,7 +134,7 @@ _mysql2_ 有如下优势：
 
 > 不论是 Java 还是 Node 中，都提供了数据库相关的接口，库只是对接口功能的实现。
 
-# 四、mysql2 使用
+## 四、mysql2 使用
 
 安装 _mysql2_：
 
@@ -138,7 +142,7 @@ _mysql2_ 有如下优势：
 npm install mysql2
 ```
 
-## 1.基本使用：
+### 1.基本使用
 
 1.创建一个连接。
 
@@ -187,7 +191,7 @@ connection.query(statement, (err, values, fields) => {
 })
 ```
 
-## 2.预处理语句
+### 2.预处理语句
 
 **Prepared Statement（预编译语句）**有如下优点：
 
@@ -247,11 +251,11 @@ connection.execute(statement, [1000, 8], (err, values) => {
 >
 > 预处理语句，可以有效防止这种情况。
 
-## 3.连接池
+### 3.连接池
 
 前面的案例中，Node 程序，仅仅是创建了一个数据库连接（`connection`）；
 
-如果要同时处理有多个请求的话，连接很有可能正在被占用。
+如果要同时处理多个请求的话，连接很有可能正在被占用。
 
 那么，每来一个请求，是否都需要去创建一个新的连接呢？
 
@@ -287,7 +291,7 @@ connectionPool.execute(statement, [1000, 0], (err, values) => {
 })
 ```
 
-## 4.Promise
+### 4.Promise
 
 mysql2 支持使用 Promise 的形式，查询数据。可结合 `async` 和 `await` 语法使用。
 
