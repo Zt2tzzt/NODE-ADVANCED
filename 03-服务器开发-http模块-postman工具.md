@@ -1,10 +1,12 @@
-# 一、Web 服务器是什么？
+# 服务器开发 & http模块 & postman工具
+
+## 一、Web 服务器是什么？
 
 当应用程序（客户端）需要某一个资源时，通过 Http 请求，向一台服务器，获取到这个资源；
 
 提供资源的这个服务器，就是一个 Web 服务器；
 
-<img src="NodeAssets/客户端向Web服务器请求资源.jpg" alt="客户端向Web服务器请求资源" style="zoom:150%;" />
+![客户端向Web服务器请求资源](NodeAssets/客户端向Web服务器请求资源.jpg)
 
 目前有很多开源的 Web 服务器，比如：
 
@@ -16,11 +18,11 @@
 
 Nods 有 `http` 模块，通常使用基于该模块的框架（如 _express_、_koa_）开发服务器。
 
-# 二、http 模块
+## 二、http 模块
 
 在 Node 中，提供 web 服务器的资源，返回给浏览器，主要是通过 `http` 模块完成的。
 
-## 1.创建服务器
+### 1.创建服务器
 
 创建服务器对象，是通过 `http.createServer` 方法来完成的。
 
@@ -41,26 +43,27 @@ const server = http.createServer((request, response) => {
 当然，我们也可以自己来创建这个对象：
 
 ```js
-const server = new http.Server((req, res) =? {
+const server = new http.Server((request, response) =? {
   res.end('Hello World')
 })
 ```
 
-现在我们已经知道，创建 Server 时会传入一个回调函数，这个回调函数在被调用时，会传入两个参数：
+现在我们知道，创建 Server 时，会传入一个回调函数，这个回调函数在被调用时，会传入两个参数：
 
 - `request` 请求对象，包含请求相关的信息；本质上是一个可读流 readable；
 - `response` 响应对象，包含我们要发送给客户端的信息；本质上是一个可写流 writeable。
 
-## 2.开启服务器
+### 2.开启服务器
 
-`server.listen` 方法，用于开启服务器；并且在某一个主机地址的端口上，监听网络请求：
+`server.listen` 方法，用于开启服务器；并且在一个主机地址的端口上，监听网络请求：
 
 - 也就是说，当通过 [ip]:[port] 的方式，发送请求到监听的 Web 服务器上时；就可以对其进行相关的处理了。
 
 `listen` 方法，有三个参数：
 
-- `port`: 端口，可以不传, 系统会默认分配,（项目中通常会定义一个全局环境变量）；
+- `port`: 端口，可以不传, 系统会默认分配,；
   - 比如：nginx 服务器，默认监听 `80` 端口。
+  - 项目中，通常会定义在全局环境变量中
 - `host`：主机， 通常不传，默认 `0.0.0.0`:
   - `localhost`：本质上是一个域名，通常情况下会被解析成 `127.0.0.1`；
   - `127.0.0.1`：回环地址（Loop Back Address），表达的意思是“主机自己发出去的包，直接被自己接收”；
@@ -101,7 +104,7 @@ server.listen(8000, () => {
 >
 > - 即最大端口是 `256 * 256 = 65536`，即 `0 - 65535` 之间的端口。
 
-## 3.创建多个服务
+### 3.创建多个服务
 
 一个主机（云主机）中，可以创建多个服务器；
 
@@ -129,7 +132,7 @@ server2.listen(3000, () => {
 })
 ```
 
-# 三、Postman 工具
+## 三、Postman 工具
 
 对服务器接口进行测试时，一般使用专业的测试工具， 如 Postman；
 
@@ -142,7 +145,7 @@ server2.listen(3000, () => {
 
 - 浏览器没法测试 post 请求。
 
-# 四、nodemon 依赖
+## 四、nodemon 依赖
 
 node 开启了一个服务器，如果又修改了服务器中的代码逻辑，需要手动重启服务器，才能生效。
 
@@ -178,9 +181,9 @@ nodemon xxx.js
 > }
 > ```
 
-# 五、request 对象
+## 五、request 对象
 
-在向服务器发送请求时，我们会携带很多信息，比如：
+在向服务器发送请求时，会携带很多信息，比如：
 
 - 本次请求的 `url`；服务器根据不同的 URL 进行不同的处理；
 - 本次请求的请求方式 `method`，服务器对 GET、POST 请求传入的参数和处理的方式是不同的；
@@ -198,9 +201,9 @@ const http = require('http')
 // 1.创建 server 服务器
 const server = http.createServer((req, res) => {
   // request 对象中包含以下常用的信息：
-  // 1.url 信息
-  // 2.method 信息(请求方式)
-  // 3.headers 信息(请求信息)
+  //  1.url 信息
+  //  2.method 信息(请求方式)
+  //  3.headers 信息(请求信息)
 
   console.log(req.url)
   // /
@@ -210,12 +213,12 @@ const server = http.createServer((req, res) => {
 
   console.log(req.headers)
   // {
-  // 	'user-agent': 'PostmanRuntime/7.31.1',
-  // 	accept: '*/*',
-  // 	'postman-token': '6b4b4127-1eff-43db-8b52-f39aec4278d9',
-  // 	host: 'localhost: 8000',
-  // 	'accept-encoding': 'gzip, deflate, br',
-  // 	connection: 'keep-alive'
+  //  'user-agent': 'PostmanRuntime/7.31.1',
+  //  accept: '*/*',
+  //  'postman-token': '6b4b4127-1eff-43db-8b52-f39aec4278d9',
+  //  host: 'localhost: 8000',
+  //  'accept-encoding': 'gzip, deflate, br',
+  //  connection: 'keep-alive'
   // }
 
   res.end('hello world aaaa')
@@ -227,9 +230,9 @@ server.listen(8000, () => {
 })
 ```
 
-# 六、url 处理
+## 六、url 处理
 
-## 1.路径处理
+### 1.路径处理
 
 客户端在发送请求时，会请求不同的数据，那么会传入不同的请求地址：
 
@@ -262,7 +265,7 @@ server.listen(8000, () => {
 })
 ```
 
-## 1.query 字符处理
+### 1.query 字符处理
 
 客户端发送的请求 url 中，经常携带一些额外的参数：
 
@@ -316,7 +319,7 @@ server.listen(8000, () => {
 })
 ```
 
-# 七、method 的处理
+## 七、method 的处理
 
 在 Restful 规范（设计风格）中，对于数据的增、删、改、查；应该通过不同的请求方式：
 
@@ -358,7 +361,7 @@ server.listen(8000, () => {
 
 > 【补充】：在框架（如 _express_）中，封装了 `method` 和 `url` 结合的处理。
 
-# 八、body 请求体参数的获取
+## 八、body 请求体参数的获取
 
 使用 POST 请求传递参数的接口，参数在 body 请求体中。
 
@@ -410,7 +413,7 @@ server.listen(8000, () => {
 })
 ```
 
-# 九、HTTP Request Header
+## 九、HTTP Request Header
 
 > 【回顾】：HTTP Request Header 相关知识。
 
@@ -480,15 +483,15 @@ const http = require('http')
 const server = http.createServer((req, res) => {
   console.log(req.headers)
   // {
-  // 	authorization: 'Bearer abc123',
-  // 	'content-type': 'application/json',
-  // 	'user-agent': 'PostmanRuntime/7.31.1',
-  // 	accept: '*/*',
-  // 	'postman-token': 'c7c5686d-f2a6-44c8-819f-f06251669114',
-  // 	host: 'localhost: 8000',
-  // 	'accept-encoding': 'gzip, deflate, br',
-  // 	connection: 'keep-alive',
-  // 	'content-length': '39'
+  //  authorization: 'Bearer abc123',
+  //  'content-type': 'application/json',
+  //  'user-agent': 'PostmanRuntime/7.31.1',
+  //  accept: '*/*',
+  //  'postman-token': 'c7c5686d-f2a6-44c8-819f-f06251669114',
+  //  host: 'localhost: 8000',
+  //  'accept-encoding': 'gzip, deflate, br',
+  //  connection: 'keep-alive',
+  //  'content-length': '39'
   // }
 
   console.log(req.headers['content-type'])
@@ -507,12 +510,12 @@ server.listen(8000, () => {
 })
 ```
 
-# 十、返回响应结果
+## 十、返回响应结果
 
 给客户端返回响应的结果数据，可通过两种方式：
 
-- `response.write` 方法：这种方式是直接写出数据，但是并没有关闭流；
-- `response.end` 方法：这种方式是写出最后的数据，并且写出后会关闭流；
+- `response.write` 方法：直接写出数据，但是并没有关闭流；
+- `response.end` 方法：写出最后的数据，并且关闭流；
 
 如果没有调用 `end` 方法，客户端将会一直等待结果：
 
@@ -542,10 +545,10 @@ server.listen(8000, () => {
 ```
 
 > 【注意】：response 本质上是一个 writeable 可写流。
-
+>
 > 【回顾】：response 特殊之处，没有 `close` 方法，只能调用 `end` 方法结束。
 
-# 十一、返回状态码
+## 十一、返回状态码
 
 Http 状态码（Http Status Code）用来表示 Http 响应状态的数字代码：
 
@@ -595,14 +598,14 @@ server.listen(8000, () => {
 })
 ```
 
-# 十二：响应头文件
+## 十二：响应头文件
 
 返回头部信息，主要有两种方式：
 
 - 方式一：`res.setHeader`：一次写入一个头部信息；
 - 方式二：`res.writeHead`：同时写入 status 状态码和 header 信息；
 
-Header 设置 `Content-Type `，让客户端以指定的格式和编码处理返回的结果；
+Header 设置 `Content-Type`，让客户端以指定的格式和编码处理返回的结果；
 
 在 `Cntent-Type` 中，指定返回的数据格式，和字符编码。
 
