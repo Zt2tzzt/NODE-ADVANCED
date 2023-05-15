@@ -1,4 +1,6 @@
-# 一、Express 路由
+# express 路由 & 静态资源部署 & koa 中间件
+
+## 一、Express 路由
 
 如果将 express 服务器中，所有的中间件，都在 app 中直接注册，那么代码会变得越来越复杂：
 
@@ -46,7 +48,7 @@ app.listen(9000, () => {
 - 更新一个用户；
 - ...
 
-这个时候，一般使用 `express.Router` 来创建一个路由处理程序：
+这个时候，一般使用 `express.Router`，来创建一个路由处理程序：
 
 - 一个 `router` 实例，拥有完整的中间件和路由系统；可以做 app 一样的操作。
 - 因此，它也被称为**迷你应用程序（mini-app）**；
@@ -88,7 +90,7 @@ app.listen(9000, () => {
 })
 ```
 
-将路由放在单独的文件中进行管理。
+将路由，放在单独的文件中，进行管理。
 
 06-Node 服务器-express\router\userRouter.js
 
@@ -134,21 +136,21 @@ app.listen(9000, () => {
 })
 ```
 
-# 二、Express 静态资源
+## 二、Express 静态资源
 
 部署静态资源，可以选择很多方式：
 
 Node 就可以作为静态资源服务器；
 
-- 可以写接口，对客户端的请求，进行处理，读取静态资源，并返回给客户端；
+- 可以写接口，对客户端的请求进行处理，使用可读流，读取静态资源，并返回给客户端；
 
 - 也可以使用 express 提供的静态资源中间件：即 `express.static('[静态资源目录]')` 方法，返回的中间件。
 
 :egg: 案例理解：
 
-案例1：访问服务器中的图片；
+案例 1：访问服务器中的图片；
 
-案例2：将打包好的项目，使用静态资源进行部署：
+案例 2：将打包好的项目，使用静态资源进行部署：
 
 - 部署后，直接访问“[主机名+端口号]”，默认会加载 `index.html`；如果没找到，就会去其它静态资源的目录下找。
 
@@ -167,7 +169,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 三、Express 错误处理
+## 三、Express 错误处理
 
 服务器开发，需要对请求进行错误处理，并将请求中的错误，返回给客户端：
 
@@ -182,7 +184,7 @@ app.listen(9000, () => {
 
 方式一：设置 http 请求的响应状态码：并返回错误信息，比如：
 
-- `res.status（400）`
+- `res.status(400)`
 - `res.json（{ msg: 'err', data: 'xxx' }`
 
 方式二：返回信息，其中包括自定义的错误代码（下面案例采用），比如：
@@ -239,7 +241,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 四、Koa 是什么？
+## 四、Koa 是什么？
 
 除了 express 框架，另外一个，非常流行的，基于 Node 的 Web 服务器框架，就是 Koa。
 
@@ -259,11 +261,11 @@ Koa 开发，根据需要，安装和使用中间件；
 
 > 【注意】：在 Koa 中，任何没有匹配到的请求，默认都会返回”Not Found“
 
-# 五、Koa 基本使用
+## 五、Koa 基本使用
 
 使用 koa 框架，基于 Node 开发 Web 服务器，过程与 express 类似。
 
-*koa* 也是通过注册中间件，来完成请求处理的；
+_koa_ 也是通过注册中间件，来完成请求处理的；
 
 _koa_ 注册的中间件（回调函数），提供了两个参数：
 
@@ -330,7 +332,7 @@ app.use((ctx, next) => {
   console.log('ctx.response:', ctx.response) // 响应对象: Koa 封装的响应对象。
   console.log('ctx.res:', ctx.res) // 响应对象: Node 封装的响应对象。
 
-  // 3/其它属性
+  // 3.其它属性
   console.log('ctx.query:', ctx.query)
   console.log('ctx.params:', ctx.params)
 })
@@ -344,7 +346,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 六、Koa 中间件
+## 六、Koa 中间件
 
 koa 注册中间件，只能通过 `app.use` 方法：且只能传入回调函数，不能使用 `get`，`post` 这样的方法，或传入路径。
 
@@ -384,14 +386,14 @@ app.listen(9000, () => {
 
 见下方案例。
 
-# 七、Koa 路由
+## 七、Koa 路由
 
 koa 官方并没有提供路由的功能，需要下载第三方库：
 
 有两种选择：
 
 - [koa-router](https://github.com/ZijianHe/koa-router)
-- [router](https://github.com/koajs/router)（项目中使用）
+- [@koa/router](https://github.com/koajs/router)（项目中使用）
 
 需要手动安装。
 
@@ -467,49 +469,49 @@ app.listen(9000, () => {
 ```
 
 > 【补充】：postman 中 `OPTIONS` 请求方式，返回接口路径封装的所有请求方法。
-
+>
 > 为 Koa 创建服务器并注册路由的代码逻辑，封装一个代码片段。
 >
 > C:\Users\00015167\AppData\Roaming\Code\User\snippets\javascript.json
 >
 > ```json
 > {
->   "koa server": {
->     "prefix": "koa-server",
->     "body": [
->       "const Koa = require('koa')",
->       "const KoaRouter = require('@koa/router')",
->       "",
->       "// 创建 Koa 服务器",
->       "const app = new Koa()",
->       "",
->       "// 创建路由对象",
->       "const ${2:router} = new KoaRouter({ prefix: '/${1:users}' })",
->       "",
->       "// 在路由中，注册中间件",
->       "${2:router}.get('/', (ctx, next) => {",
->       "  ctx.body = 'user list data~'",
->       "})",
->       "",
->       "// 注册路由",
->       "app.use(${2:router}.routes())",
->       "app.use(${2:router}.allowedMethods())",
->       "",
->       "",
->       "// 开启 Koa 服务器",
->       "app.listen(9000, () => {",
->       "  console.log('koa 服务器启动成功~')",
->       "})",
->       ""
->     ],
->     "description": "koa server"
->   }
+>     "koa server": {
+>       "prefix": "koa-server",
+>       "body": [
+>         "const Koa = require('koa')",
+>         "const KoaRouter = require('@koa/router')",
+>         "",
+>         "// 创建 Koa 服务器",
+>         "const app = new Koa()",
+>         "",
+>         "// 创建路由对象",
+>         "const ${2:router} = new KoaRouter({ prefix: '/${1:users}' })",
+>         "",
+>         "// 在路由中，注册中间件",
+>         "${2:router}.get('/', (ctx, next) => {",
+>         "  ctx.body = 'user list data~'",
+>         "})",
+>         "",
+>         "// 注册路由",
+>         "app.use(${2:router}.routes())",
+>         "app.use(${2:router}.allowedMethods())",
+>         "",
+>         "",
+>         "// 开启 Koa 服务器",
+>         "app.listen(9000, () => {",
+>         "  console.log('koa 服务器启动成功~')",
+>         "})",
+>         ""
+>       ],
+>       "description": "koa server"
+>     }
 > }
 > ```
 
-# 八、Koa 请求参数解析
+## 八、Koa 请求参数解析
 
-## 1.GET 请求
+### 1.GET 请求
 
 07-Node 服务器-Loa\05-koa 请求参数.js
 
@@ -546,7 +548,7 @@ app.listen(9000, () => {
 })
 ```
 
-## 2.POST 请求
+### 2.POST 请求
 
 body 请求体中的 json、x-www-form-urlencoded 数据解析。
 
@@ -648,7 +650,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 九、Koa 文件上传
+## 九、Koa 文件上传
 
 安装一个库 [multer](https://github.com/koajs/multer)
 
@@ -707,5 +709,4 @@ app.listen(9000, () => {
 })
 ```
 
-> 【注意】：文件保存的目录，要存在，否则会返回“Not Found”。
-
+> 【注意】：文件保存的目录，应该是存在，否则会返回“Not Found”。
