@@ -1,4 +1,6 @@
-# 一、Koa 静态资源服务器
+# koa静态资源 & 响应结果 & 错误处理 & 洋葱模型 & 源码
+
+## 一、Koa 静态资源服务器
 
 koa 并没有内置部署相关的功能；
 
@@ -28,7 +30,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 二、Koa 响应数据结果
+## 二、Koa 响应数据结果
 
 响应输出结果时：可将 body 响应主体，设置为以下之一：
 
@@ -39,7 +41,7 @@ app.listen(9000, () => {
 
 - null：不输出任何内容；
 
-如果 `response.status` 尚未设置，Koa 会自动将状态设置为 `200` 或 `204`。
+如果 `response.status` 未设置，Koa 自动将状态设置为 `200` 或 `204`。
 
 设置请求状态，使用 `ctx.status`：
 
@@ -63,19 +65,16 @@ userRouter.get('/', (ctx, next) => {
 
   // 2.body 的类型是 buffer
   // ctx.body = Buffer.from('你好啊，李银河~')
-  
-  // 浏览器中，会将返回的结果，作为一个文件下载下来。
-  // postman 会将返回的是 buffer / stream 类型，自动使用 utf8 解码。并直接展示
+  /* 浏览器客户端中，会将返回的结果，作为一个文件下载下来。
+    postman 客户端中，会将返回的是 buffer / stream 类型，自动使用 utf8 解码。并直接展示 */
 
   // 3.body 的类型是 stream
-  // 设置返回的 stream 的类型，默认是文本类型，设置为 image/jpeg，表示图片。
-  // 一般不用这么做，部署静态资源服务器即可。
-  
+  /* 设置返回的 stream 的类型，默认是文本类型，设置为 image/jpeg，表示图片。
+    一般不用这么做，部署静态资源服务器即可。
+    postman，浏览器中，直接展示图片，相当于访问静态资源 */
   // const readStream = fs.createReadStream('./uploads/1668331072032_kobe02.png')
   // ctx.type = 'image/jpeg'
   // ctx.body = readStream
-  
-  // postman，浏览器中，直接展示图片，相当于访问静态资源。
 
   // 4.body 的类型是数据 object | array，用的最多。
   ctx.status = 201
@@ -103,7 +102,7 @@ app.listen(9000, () => {
 
 `ctx.response.body` 和 `ctx.body` 是一样的。
 
-# 三、koa 错误信息处理
+## 三、koa 错误信息处理
 
 在一个中间件中，完成错误处理：
 
@@ -143,11 +142,9 @@ app.listen(9000, () => {
 })
 ```
 
-为了优雅，简洁的进行错误处理，通常将错误处理的代码，统一放在一处进行处理。
+为了优雅，简洁地进行错误处理，通常将错误处理的代码，统一放在一起进行处理。
 
-但是，Koa 中间件中，`next` 函数不接受参数。
-
-而是要使用 `ctx.app`（就是 koa 创建服务器，返回的 `app` 对象），本质上是一个 EventEmiter
+但是，Koa 中间件中，`next` 函数不接受参数，而是要使用 `ctx.app`（就是 koa 创建服务器，返回的 `app` 对象），本质上是一个 EventEmiter
 
 - 产生错误时，可发送一个 `“error”` 事件，并传递错误码和 `ctx` 对象。
 - 使用 app 监听 `“error”` 事件，在一个单独的回调函数中，处理错误。
@@ -210,7 +207,7 @@ app.listen(9000, () => {
 
 > 【补充】：chrome 浏览器，不建议访问一些特殊的端口，其中包括 `6000` 端口。
 
-# 四、Koa 和 express 的区别（面试）
+## 四、Koa 和 express 的区别（面试）
 
 从架构设计上来说：
 
@@ -225,7 +222,7 @@ koa 是简洁和自由的，它只包含最核心的功能，并不会对使用�
 
 express 和 koa 框架，核心都是中间件，核心区别，也在于中间件的使用：
 
-它们的中间件的执行机制，是不同的，特别是针对某个中间件中，包含异步操作时；
+它们的中间件的执行机制，是不同的，特别是针对某个中间件中，包含**异步操作**时；
 
 express 和 koa 中间件的执行顺序分析；
 
@@ -234,7 +231,8 @@ koa 中的中间件：
 - 在执行同步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码；
   - 之后再执行上一个中间件中 `next` 方法后面的代码。
 - 在执行异步代码时，在上一个中间件中，只要调用 `next` 方法，就会执行下一个中间件的代码，
-  - 下一个中间件的代码，是异步操作，默认不会等到异步代码的结果；就会回到上一个中间件中，执行 `next()` 后方的代码；如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
+  - 下一个中间件的代码，是异步操作，默认不会等到异步代码的结果；就会回到上一个中间件中，执行 `next()` 后方的代码；
+  - 如果需要等待结果，再执行上一个中间件 `next` 函数后的代码，那么，该 `next` 函数前，加 `await`。
 
 > 【回顾】：async await 异步函数的原理，生成器。
 
@@ -336,7 +334,7 @@ const app = express()
 app.use(async (req, res, next) => {
   console.log('express middleware01')
   req.msg = 'aaa'
-  await next() // 在这里，await 是无效的；express 中，next 返回的不是 Promise。
+  next() // 在这里，如果使用 await 是无效的；express 中，next 返回的不是 Promise。
   // 返回值结果
   // res.json(req.msg) 在这里返回结果，下方中间件中的 axios.get 异步操作还没执行。
 })
@@ -344,7 +342,7 @@ app.use(async (req, res, next) => {
 app.use(async (req, res, next) => {
   console.log('express middleware02')
   req.msg += 'bbb'
-  await next() // 在这里，await 是无效的；express 中，next 返回的不是 Promise。
+  next() // 在这里，如果使用 await 是无效的；express 中，next 返回的不是 Promise。
 })
 
 // 执行异步代码
@@ -411,7 +409,7 @@ app.listen(9000, () => {
 })
 ```
 
-# 五、koa 洋葱模型（面试）
+## 五、koa 洋葱模型（面试）
 
 洋葱模型，是由社区总结的，用于形象地描述 koa 框架的模型，它两层理解含义：
 
@@ -426,9 +424,9 @@ app.listen(9000, () => {
 
 express 执行异步代码时，不适用洋葱模型。
 
-<img src="NodeAssets/koa洋葱模型.jpg" alt="Koa洋葱模型" style="zoom:60%;" />
+![Koa洋葱模型](NodeAssets/koa洋葱模型.jpg)
 
-# 六、express 源码理解
+## 六、express 源码理解
 
 使用 VSCode 自带的 debug，打断点进行调试。
 
@@ -444,4 +442,3 @@ express 创建服务器的过程。
 `app.use` 默认会有一个路由，是整个 `app` 的路由。
 
 将路径，中间件保存在 layer 中，layer 放在 `router.stack` 中，当监听到请求时，进行匹配。
-
