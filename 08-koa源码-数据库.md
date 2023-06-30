@@ -139,9 +139,7 @@ SHOW DATABASES;
 MySQL 默认存在的数据库有：
 
 - `information_schema`：信息数据库，其中包括 MySQL 在维护的其他数据库、表、列、访问权限等信息；
-
 - `performance_schema`：性能数据库，记录着 MySQL Server 数据库引擎在运行过程中的一些资源消耗相关的信息；
-
 - `mysql`：用于存储数据库管理者的用户信息、权限信息以及一些日志信息等；
 - `sys`：相当于是一个简易版的 `performance_schema`，将性能数据库中的数据汇总成更容易理解的形式；
 
