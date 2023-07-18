@@ -31,7 +31,7 @@ JavaScript 可以直接去处理，非常直观的数据：
 
 而对于服务器端，很多时候，必须直接去操作二进制的数据；
 
-所以，Node 为了方便开发者完成二进制文件相关功能，在全局提供给了一个类——`Buffer`；
+所以，Node 为了方便开发者完成二进制文件相关功能，在全局提供给了一个类 `Buffer`；
 
 `Buffer` 中存储的是二进制数据，可以将 `Buffer` 看成是一个存储二进制的数组；
 
@@ -59,7 +59,7 @@ buffer 的三种表示方式:
 
 - 一个字节;
 - [1111 1111];
-- [ff]（换算成十六进制表示，本质上还是二进制）.
+- [ff]（换算成二位的十六进制表示，本质上还是二进制）.
 
 ## 三、Buffer 和字符串转化
 
@@ -95,7 +95,7 @@ console.log('buf2:', buf2)
 
 ### 1.如果是中文呢？
 
-中文汉字通常用 **3** 个字节存储；复杂的中文汉字，可能会使用 **4** 个字节存储。
+1 个中文汉字，通常用 **3** 个字节存储；1 个复杂的中文汉字，可能会使用 **4** 个字节存储。
 
 03-Node 类-Buffer\01-Buffer 和字符串的转换.js
 
@@ -329,7 +329,7 @@ function fromStringFast(string, ops) {
 
 ## 六、Stream 是什么？
 
-Stream 翻译为”小溪“、”小河“。在编程中，通常翻译为“流”？
+Stream 翻译为”小溪“、”小河“。在编程中，通常翻译为“流”；
 
 从一个文件中，读取数据时，文件的二进制（字节）数据，会源源不断的被读取到程序中；
 
@@ -385,7 +385,7 @@ Node.js 中有四种基本流类型：
 - `end`：文件读取结束的位置（包括，闭区间）；
 - `highWaterMark`：一次性读取字节的长度，默认是 `64kb`；
 
-更多参数参考[官方文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatereadstreampath-options)：
+更多参数，参考[官方文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatereadstreampath-options)：
 
 Readable 的基本使用：
 
@@ -479,7 +479,7 @@ fs.writeFile(
 
 这个时候，使用 `fs.createWriteStream`，在传入其中的 options 中，有几个参数，更多参数参考[官网文档](https://nodejs.org/dist/latest-v18.x/docs/api/fs.html#fscreatewritestreampath-options)：
 
-- `flags`：默认是 `w`，如果希望是追加写入，可以使用 `a` 或者 `a+`；
+- `flags`：默认是 `w`，如果希望，追加写入，可以使用 `a` 或者 `a+`；
 - `start`：写入的位置；
 
 > 【注意】：`flag` 使用 `a+` 时，Windows 系统上该操作是无效的，要使用 `r+`；
@@ -546,9 +546,9 @@ writeStream.on('close', () => {
 1. 写入传入的数据；
 2. 调用 `close` 方法；
 
-可读流可以监听到 `“end”`、`"close"` 事件；
-
-可写流可以监听到 `"finish"`，`“close“` 事件。
+> 可读流可以监听到 `“end”`、`"close"` 事件；
+>
+> 可写流可以监听到 `"finish"`，`“close“` 事件
 
 ## 十、pipe 方法
 
