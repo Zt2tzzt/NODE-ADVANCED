@@ -1,10 +1,12 @@
-# 一、软件架构图
+# 认识Node-fs模块-event模块
+
+## 一、软件架构图
 
 理解软件开发的架构图。
 
-<img src="NodeAssets/软件架构图.jpg" alt="软件架构图" style="zoom:100%;" />
+![软件架构图](NodeAssets/软件架构图.jpg)
 
-# 二、Node.js 是什么？
+## 二、Node.js 是什么？
 
 官方对 Node.js 的定义：一个基于 V8 引擎的 JavaScript 运行时环境。
 
@@ -15,6 +17,7 @@ Node.js 基于 V8 引擎，执行 JavaScript 代码，但 Node.js 不仅仅只�
 无论是 Chrome 还是 Node.js，都是嵌入了 V8 引擎来执行 JavaScript 代码；
 
 事实上，在 Chrome 浏览器中：
+
 - 还有解析、渲染 HTML、CSS 等相关渲染引擎；
 - 还有支持浏览器操作的 API；
 - 还有浏览器自己的事件循环等；
@@ -26,19 +29,19 @@ Node.js 基于 V8 引擎，执行 JavaScript 代码，但 Node.js 不仅仅只�
 - 加密、压缩解压文件等操作；
 - ...
 
-# 三、浏览器对比 Node.js
+## 三、浏览器对比 Node.js
 
 浏览器和 Node.js 架构的区别。
 
 ![浏览器和 Node.js 架构的区别](NodeAssets/浏览器和Node.js架构的区别.jpg)
 
-# 四、Node.js 架构图
+## 四、Node.js 架构图
 
 在 Node 中，编写的 JavaScript 代码会：
 
-- 经过 V8 引擎编译执行；
-- 再通过 Node.js 的 Bindings；
-- 将任务放到 Libuv 的事件循环中；
+1. 经过 V8 引擎编译执行；
+2. 再通过 Node.js 的 Bindings；
+3. 将任务放到 Libuv 的事件循环中；
 
 libuv（Unicorn Velociraptor 独角伶盗龙）是使用 C 语言编写的库；
 
@@ -46,9 +49,9 @@ libuv 提供了事件循环、文件系统读写、网络 IO、线程池等等�
 
 libuv，将 js 代码，转化成系统操作。
 
-<img src="NodeAssets/NodeJs架构.jpg" alt="NodJs架构" style="zoom:100%;" />
+![NodJs架构](NodeAssets/NodeJs架构.jpg)
 
-# 五、内置模块 fs
+## 五、内置模块 fs
 
 fs 是 **File System** 的缩写，表示文件系统。
 
@@ -65,23 +68,28 @@ Node 是**跨平台**的，借助于封装的文件系统，在任何的操作�
 
 - 这是 Node 可以开发服务器的一大原因，也是它可以成为，热门的前端自动化脚本工具的原因；
 
-> 【注意】：”数据“不一定要存储在数据库中，存储在文本文件中，也不是不行；只不过，有诸多缺点，比如：读写效率更低。
+> 【注意】：”数据“不一定要存储在数据库中，存储在文本文件中，也不是不行；只不过，有诸多缺点，比如：读写效率低。
 
-## 1.文件读取
+### 1.文件读取
 
-Node 文件系统 fs 的 API 非常的多：详见[官方文档](https://nodejs.org/docs/latest-v16.x/api/fs.html)；
+Node 文件系统（file system）的 API 非常的多：详见[官方文档](https://nodejs.org/docs/latest-v16.x/api/fs.html)；
 
 这些 API，大多都提供三种操作方式：
 
-- 方式一：同步操作文件：
-  - 代码会被阻塞，不会继续执行；
-- 方式二：异步回调函数，操作文件：
-  - 代码不会被阻塞，需要传入回调函数，当获取到结果时，回调函数被执行；
-- 方式三：异步 Promise 操作文件：
-  - 代码不会被阻塞，通过 `fs.promises` 调用方法操作，会返回一个 Promise；
-  - 可以通过 `then`、`catch` 进行处理；
+方式一：同步操作文件：
 
-方式三，方式二，本质上一样，都是异步处理；方式三使用 Promise 更加现代化。
+- 代码会被阻塞，不会继续执行；
+
+方式二：异步回调函数，操作文件：
+
+- 代码不会被阻塞，需要传入回调函数，当获取到结果时，回调函数被执行；
+
+方式三：异步 Promise 操作文件：
+
+- 代码不会被阻塞，通过 `fs.promises` 调用方法操作，会返回一个 Promise；
+- 可以通过 `then`、`catch` 进行处理；
+
+方式三，方式二，本质上一样，都是异步处理；方式三，使用 Promise 更加现代化。
 
 :egg: 案例理解：
 
@@ -95,14 +103,14 @@ Node 文件系统 fs 的 API 非常的多：详见[官方文档](https://nodejs.
 const fs = require('fs')
 
 /**
- * 默认读取文件，会以二进制显示，而打印出来又会转成十六进制。
+ * 默认读取文件，会以二进制的形式显示，而打印出来又会转成十六进制。
  */
 const res1 = fs.readFileSync('./aaa.txt')
 console.log('res1:', res1)
 // <Buffer 48 65 6c 6c 6f 20 46 72 6f 67 20 e4 bd a0 e5 a5 bd e5 95 8a ef bc 8c e6 9d 8e e9 93 b6 e6 b2 b3>
 
 /**
- * 读取文件时，传入编码方式，如 'utf8'，告诉 Node 读取文件时，应该如何解码。
+ * 读取文件时，传入编码方式，如 'utf8'，告诉 Node 应该如何解码。
  */
 const res2 = fs.readFileSync('./aaa.txt', {
   encoding: 'utf8'
@@ -140,13 +148,13 @@ fs.readFile(
   }
 )
 console.log('res3 的后续代码执行~')
-//res3 的后续代码执行~
-//res3: Hello Frog 你好啊，李银河
+// res3 的后续代码执行~
+// res3: Hello Frog 你好啊，李银河
 ```
 
 异步读取方式，Promise 形式。
 
-`fs.promises.readFile`
+`fs.promises.readFile`；
 
 01-Node 模块-fs\01_fs 文件读取的 api.js
 
@@ -166,7 +174,7 @@ fs.promises
   })
 ```
 
-## 2.文件描述符
+### 2.文件描述符
 
 文件描述符（**File descriptors**），简称 fd；
 
@@ -219,15 +227,16 @@ fs.open('./bbb.txt', (err, fd) => {
 })
 ```
 
-> 真实开发中，使用 Promise 演示示例时，用的是回调方式，
-
-以上是读取文件比较完整的过程。
-
-> 【注意】：`fs.open` 后，要调用 `fs.close`;
+> 真实开发中，使用 Promise；
 >
-> - 这是因为：Node 服务器中的进程，一般不会关闭，要一直提供服务，所以不需要的进程，手动进行关闭。
+> 演示示例时，用的是回调方式，
 
-## 3.文件写入
+以上，是读取文件，比较完整的过程。
+
+> 【注意】：`fs.open` 后，要调用 `fs.close`；这是因为：Node 服务器中的进程，一般不会关闭，要一直提供服务，所以不需要的进程，应手动进行关闭。
+>
+
+### 3.文件写入
 
 如果要对文件的内容，进行操作，可以使用文件的写入；
 
@@ -239,7 +248,7 @@ fs.open('./bbb.txt', (err, fd) => {
   - `flag` 写入的方式。
   - `encoding` 字符编码。
 
-### 1.flag 选项
+#### 1.flag 选项
 
 `flag` 的值有很多，详见[官方文档](https://nodejs.org/dist/latest-v14.x/docs/api/fs.html#fs_file_system_flags)
 
@@ -250,7 +259,7 @@ fs.open('./bbb.txt', (err, fd) => {
 - `a` append 缩写，表示打开要写入的文件，将流放在文件末尾。如果不在则创建文件；
 - `a+` 打开文件以进行读写（可读可写），将流放在文件末尾。如果不存在则创建文件。
 
-### 2.encoding 选项
+#### 2.encoding 选项
 
 关于字符编码的概念，详见[此处](https://www.jianshu.com/p/899e749be47c)；
 
@@ -282,9 +291,9 @@ fs.writeFile(
 )
 ```
 
-## 4.文件夹操作
+### 4.文件夹操作
 
-### 1.创建
+#### 1.创建
 
 `fs.mkdir`
 
@@ -298,7 +307,7 @@ fs.mkdir('./zzt', err => {
 })
 ```
 
-### 2.读取内容
+#### 2.读取内容
 
 `fs.readdir`
 
@@ -332,9 +341,9 @@ fs.readdir('./zzt', { withFileTypes: true }, (err, files) => {
 
   console.log('files:', files)
   // files: [
-  // 	Dirent { name: 'aaa', [Symbol(type)]: 2 },
-  // 	Dirent { name: 'bbb', [Symbol(type)]: 2 },
-  // 	Dirent { name: 'nba.txt', [Symbol(type)]: 1 }
+  // Dirent { name: 'aaa', [Symbol(type)]: 2 },
+  // Dirent { name: 'bbb', [Symbol(type)]: 2 },
+  // Dirent { name: 'nba.txt', [Symbol(type)]: 1 }
   // ]
 
   files.forEach(item => {
@@ -368,7 +377,7 @@ const readDirectoryFile = path => {
 readDirectoryFile('./zzt')
 ```
 
-### 3.重命名
+#### 3.重命名
 
 文件夹、文件，都可以重命名。
 
@@ -401,7 +410,7 @@ fs.rename('./ccc.txt', './ddd.txt', err => {
 
 > Vue、React 项目打包，本质上也是使用 Node 写入文件。
 
-# 六、events 模块
+## 六、events 模块
 
 Node 中，很多核心 API，都基于 events 事件驱动；
 
