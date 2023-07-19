@@ -98,7 +98,7 @@ server.listen(8000, () => {
 >
 > 一般要开启服务器，要监听 `(1024，65535]` 之间的端口。
 >
-> - 监听小于等于 1024 的端口，可能会覆盖系统的某些特殊服务端口。
+> - 小于等于 1024 的端口，可能是系统的特殊服务端口。
 >
 > 通常操作系统使用两个字节，表示端口；
 >
@@ -189,7 +189,7 @@ nodemon xxx.js
 - 本次请求的请求方式 `method`，服务器对 GET、POST 请求传入的参数和处理的方式是不同的；
 - 本次请求的 `headers` 中也会携带一些信息，
   - 比如客户端信息、接受数据的格式、支持的编码格式等等；
-- 等等。
+- ...
 
 这些信息，Node 会封装到 `request` 对象中，方便开发者进行处理。
 
@@ -232,7 +232,7 @@ server.listen(8000, () => {
 
 ## 六、url 处理
 
-### 1.路径处理
+### 1.path 处理
 
 客户端在发送请求时，会请求不同的数据，那么会传入不同的请求地址：
 
@@ -387,7 +387,7 @@ const server = http.createServer((req, res) => {
   // 获取参数: body 参数
   req.setEncoding('utf-8')
 
-  // request 对象本质是上一个 readable 可读流
+  // request 对象本质上是一个 readable 可读流
   let isLogin = false
   req.on('data', dataString => {
     const loginInfo = JSON.parse(dataString)
@@ -454,7 +454,7 @@ User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML,
 
   - 浏览器需要在请求头中添加 `connection: keep-alive`；
   - 服务器需要在响应头中添加 `connection: keey-alive`；
-  - 当客户端再次放请求时，就会使用同一个连接，直到一方中断连接；
+  - 当客户端再次请求时，就会使用同一个连接，直到一方中断连接；
 
 - 在 http1.1 中，所有连接默认是 `connection: keep-alive` 的；
   - 不同的 Web 服务器，会有不同的保持 `keep-alive` 的时间；
@@ -572,7 +572,7 @@ Http 状态码非常多，可以根据不同的情况，给客户端返回不同
 
 设置状态码有两种方式：
 
-- `res.resstatusCode` 属性指定；
+- `res.statusCode` 属性指定；
 - `res.writeHeaded` 方法。
 
 05-Node 服务器-http\10-response-响应状态码.js
@@ -605,7 +605,7 @@ server.listen(8000, () => {
 - 方式一：`res.setHeader`：一次写入一个头部信息；
 - 方式二：`res.writeHead`：同时写入 status 状态码和 header 信息；
 
-Header 设置 `Content-Type`，让客户端以指定的格式和编码处理返回的结果；
+Header 设置 `Content-Type`，让客户端，以指定的格式和编码，处理返回的结果；
 
 在 `Cntent-Type` 中，指定返回的数据格式，和字符编码。
 
