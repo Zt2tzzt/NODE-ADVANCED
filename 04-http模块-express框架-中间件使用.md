@@ -359,10 +359,10 @@ server.listen(8000, () => {
 </html>
 ```
 
-现在发送网络请求，一般不用 form-data 携带数据，而将它用于上传文件，
-
-早期后端渲染时，JSP 会采用 form-data 携带数据发送网络请求。
-
+> 现在发送网络请求，一般不用 form-data 携带数据，而将它用于上传文件，
+>
+> 早期后端渲染时，JSP 会采用 form-data 携带数据发送网络请求。
+>
 > 【注意】：在用 liverServer 本地测试时，上传图片后，可能会自动刷新页面，这是因为可写流保存下来的图片，可能保存在了 liverServer 开启 Web 服务的目录下。
 
 ## 三、Web 服务器框架
@@ -435,7 +435,7 @@ const express = require('express')
 const app = express()
 
 app.post('/login', (req, res) => {
-  // res, req 经过 express 的封装，并不是 http 模块中，原生的 response、request 对象。
+  // req, res 经过 express 的封装，并不是 http 模块中，原生的 request, response 对象。
   res.end('登陆成功，欢迎回来~')
 })
 
@@ -464,10 +464,10 @@ _Express_ 应用程序，本质上是一系列中间件函数的调用；
 
 中间件的本质是传递给 _express_ 的一个**回调函数**；
 
-这个回调函数接受三个形参：
+这个回调函数接收三个形参：
 
-- 请求对象 `request`；
-- 响应对象 `response`；
+- 请求对象 `req`（request）；
+- 响应对象 `res`（response）；
 - `next` 函数（在 _express_ 中定义的，用于执行下一个可匹配到的中间件的函数）；
 
 ![express中间件](NodeAssets/express中间价.jpg)
@@ -475,7 +475,7 @@ _Express_ 应用程序，本质上是一系列中间件函数的调用；
 在中间件里，可以执行哪些任务呢？
 
 - 执行任何代码；
-- 更改请求（`request`）和响应（`response`）对象；
+- 更改请求（`req`）和响应（`res`）对象；
 - 结束“请求-响应周期”，返回响应结果数据；
 - 调用栈中的下一个中间件；
 
