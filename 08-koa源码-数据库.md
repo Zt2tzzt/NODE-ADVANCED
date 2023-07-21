@@ -224,7 +224,7 @@ SQL 语句的常用规范：
 
 **DDL（Data Definition Language）**：数据定义语言；
 
-- 对数据库或者表，进行创建、删除、修改等操作；
+- 对数据库，或者表，进行创建、删除、修改等操作；
 
 **DML（Data Manipulation Language）**：数据操作语言；
 
