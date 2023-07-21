@@ -2,7 +2,7 @@
 
 ## 一、Express 路由
 
-如果将 express 服务器中，所有的中间件，都在 app 中直接注册，那么代码会变得越来越复杂：
+如果 express 服务器中，所有的中间件，都在 app 中下方直接注册，那么代码会变得越来越复杂：
 
 06-Node 服务器-express\17-express-路由.js
 
@@ -40,7 +40,8 @@ app.listen(9000, () => {
 
 其中，有些处理逻辑，其实是一个整体，应该将它们放在一起：
 
-- 比如，对 users 相关的处理，其中包括：
+比如，对 users 相关的处理，其中包括：
+
 - 获取用户列表；
 - 获取某一个用户信息；
 - 创建一个新的用户；
@@ -48,12 +49,12 @@ app.listen(9000, () => {
 - 更新一个用户；
 - ...
 
-这个时候，一般使用 `express.Router`，来创建一个路由处理程序：
+这个时候，一般使用 `express.Router()`，来创建一个路由处理程序：
 
 - 一个 `router` 实例，拥有完整的中间件和路由系统；可以做 app 一样的操作。
 - 因此，它也被称为**迷你应用程序（mini-app）**；
 
-重构上面的代码，使用路由注册路由中间件：
+重构上面的代码，使用路由，注册路由中间件：
 
 06-Node 服务器-express\17-express-路由.js
 
@@ -269,9 +270,8 @@ _koa_ 也是通过注册中间件，来完成请求处理的；
 
 _koa_ 注册的中间件（回调函数），提供了两个参数：
 
-`ctx`：上下文（Context）对象；
+`ctx`：上下文（Context）对象；（_koa_ 并没有像 _express_ 一样，将 `req` 和 `res` 分开，而是将它们作为 `ctx` 的属性；）
 
-- _koa_ 并没有像 _express_ 一样，将 `req` 和 `res` 分开，而是将它们作为 `ctx` 的属性；
 - `ctx` 代表一次请求的上下文对象；
 - `ctx.request`：是 Koa 封装的请求对象；`ctx.req`：是 Node 的 _http_ 模块封装的请求对象。
   - 大部分 `ctx.request` 对象拥有的属性，`ctx` 中也有。
@@ -279,11 +279,7 @@ _koa_ 注册的中间件（回调函数），提供了两个参数：
 
 `next`：本质上是一个异步方法（dispatch），使用时，类似于 express 的 `next`，但处理异步代码时，有所不同。
 
-Koa 返回响应数据结果时，可用 `ctx.response.end`, `ctx.res.end`, `ctx.body` 属性赋值.
-
-koa 创建服务器，开启服务器，使用中间件；
-
-koa 中间件无法使用 `get`、`post` 这样的方法，进行注册；只能使用 `use` 方法。
+Koa 返回响应结果时，可用 `ctx.response.end`, `ctx.res.end`, `ctx.body` 属性赋值.
 
 安装 Koa：
 
@@ -292,6 +288,10 @@ npm install koa
 ```
 
 基本使用：
+
+koa 创建服务器，开启服务器，使用中间件；
+
+koa 中间件无法使用 `get`、`post` 这样的方法，进行注册；只能使用 `use` 方法。
 
 07-Node 服务器-Loa\01-koa 基本使用.js
 
@@ -405,7 +405,7 @@ npm install @koa/router
 
 在路由中，注册中间件。
 
-07-Node 服务器-Loa\router\user.router.js
+07-Node 服务器-koa\router\user.router.js
 
 ```js
 const KoaRouter = require('@koa/router')
@@ -438,16 +438,16 @@ module.exports = userRouter
 
 让路由生效。
 
-1.使用 `app.use(router.routes())` 注册路由。
+1.使用 `app.use(xxxRouter.routes())` 注册路由。
 
 在 Koa 中，任何没有匹配到的请求，默认都会返回“Not Found”，处理这种情况。
 
 2.使用 `app.use(router.allowedMethods()` 注册为中间件。
 
-`allowedMethods` 用于判断请求的 method 或 path，服务器是否做了处理：
+`allowedMethods` 用于判断请求的 `method` 或 `path`，服务器是否做了处理：
 
-- 如果发送的请求，未匹配到 method，自动返回：“Method Not Allowed”，状态码：405；
-- 如果发送的请求，未匹配到 path，自动返回：“Not Implemented”，状态码：404；
+- 如果发送的请求，未匹配到 `method`，自动返回：“Method Not Allowed”，状态码：405；
+- 如果发送的请求，未匹配到 `path`，自动返回：“Not Implemented”，状态码：404；
 
 > 【补充】：在一个项目中可以既使用 yarn，又使用 npm，但建议统一用一种包管理工具。
 
@@ -607,15 +607,16 @@ app.listen(9000, () => {
 
 > 【注意】：
 >
-> - 不要从 `ctx.body` 中获取数据，这是用来返回结果的；
-> - 早期很多库，都将解析后的信息放在 `ctx.req.body` 中，现在一般放在 `ctx.request.body` 中。
+> 不要从 `ctx.body` 中获取数据，这是用来返回结果的；
+>
+> 早期很多库，都将解析后的信息放在 `ctx.req.body` 中，现在一般放在 `ctx.request.body` 中。
 
 body 请求体中的 form-data 数据解析。
 
 安装一个库，[multer](https://github.com/koajs/multer)、
 
 ```shell
-npm install --save @koa/multer multer
+npm install @koa/multer multer
 ```
 
 07-Node 服务器-Loa\05-koa 请求参数.js
@@ -655,7 +656,7 @@ app.listen(9000, () => {
 安装一个库 [multer](https://github.com/koajs/multer)
 
 ```shell
-npm install --save @koa/multer multer
+npm install @koa/multer multer
 ```
 
 在 `ctx.request.file` 中，获取单文件上传信息。
