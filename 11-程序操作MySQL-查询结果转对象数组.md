@@ -26,25 +26,6 @@ mysql2 会将查询到的表中的记录，转化成数组返回，
 
 多表查询时，查询到的结果，通常是多张表，比如查询“手机+品牌”的信息：
 
-比如：使用如下 SQL 语句查询：
-
-```mysql
-SELECT
-  products.id AS id,
-  products.title AS title,
-  products.price AS price,
-  products.score AS score,
-  JSON_OBJECT(
-    'id', brands.id,
-    'name', brands.name,
-    'rank', brands.worldRank,
-    'website', brands.website
-  ) AS brand
-FROM products
-LEFT JOIN brands
-  ON products.brand_id = brands.id;
-```
-
 同样的，_mysql2_ 也会将表转化成数组返回，其中每个元素，是一个个对象。
 
 - 但是，多表查询时，往往希望，`LEFT JOIN` 的表（`brands` 表）中，查询到的结果，能够作为一个对象返回，就像如下的格式一样。
@@ -67,6 +48,25 @@ LEFT JOIN brands
 ]
 ```
 
+使用如下 SQL 语句查询：
+
+```mysql
+SELECT
+  products.id AS id,
+  products.title AS title,
+  products.price AS price,
+  products.score AS score,
+  JSON_OBJECT(
+    'id', brands.id,
+    'name', brands.name,
+    'rank', brands.worldRank,
+    'website', brands.website
+  ) AS brand
+FROM products
+LEFT JOIN brands
+  ON products.brand_id = brands.id;
+```
+
 ## 二、MySQL 查询转数组
 
 在多对多关系中，通常希望查询到的是一个数组：
@@ -74,6 +74,22 @@ LEFT JOIN brands
 - 比如：一个学生的多门选课信息，应该是放到一个数组中的；
 - 数组中存放的是课程信息的一个个对象；
 - 这时，要将 `JSON_ARRAYAGG()` 和 `JSON_OBJECT()` 函数结合来使用；
+
+mysql2 查询到的是如下形式的数据：
+
+```json
+[
+  {...,
+    course: [
+      {...}, {...}, {...}, ...]
+    },
+  {...,
+    course: [
+      {...}, {...}, ...], ...]
+    },
+  ...
+]
+```
 
 使用如下 SQL 语句查询：
 
@@ -94,22 +110,6 @@ LEFT JOIN students_select_courses ssc
 LEFT JOIN courses cs
   ON ssc.course_id = cs.id
 GROUP BY stu.id;
-```
-
-mysql2 查询到的是如下形式的数据：
-
-```json
-[
-  {...,
-    course: [
-      {...}, {...}, {...}, ...]
-    },
-  {...,
-    course: [
-      {...}, {...}, ...], ...]
-    },
-  ...
-]
 ```
 
 > 以上两种方式，虽然可以通过代码处理，但 MySQL 已提供了函数，更加方便。
