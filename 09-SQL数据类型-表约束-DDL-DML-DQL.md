@@ -2,7 +2,7 @@
 
 ## 一、SQL 数据类型
 
-不同的数据，会划分为不同的数据类型，在数据库中也是一样：
+数据库中，有不同的数据类型：
 
 MySQL 支持的数据类型有：
 
@@ -393,7 +393,7 @@ SELECT * FROM products WHERE title LIKE '%v%';
 SELECT * FROM products WHERE title LIKE '__m%';
 ```
 
-以上查询条件，不仅仅适用于 DQL 查询语句，也适用于 DML 修改，删除语句。
+> 以上查询条件，不仅仅适用于 DQL 查询语句，也适用于 DML 修改，删除语句。
 
 ### 4.排序
 
