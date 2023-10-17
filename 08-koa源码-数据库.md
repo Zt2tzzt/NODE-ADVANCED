@@ -119,13 +119,13 @@ Mac 推荐下载 DMG 的版本；在安装过程中，会配置一些环境变�
 方式一：
 
 ```mysql
-mysql -uroot -p[password]
+mysql -u[username] -p[password]
 ```
 
 方式二：
 
 ```mysql
-mysql -uroot -p
+mysql -u[username] -p
 
 Enter password: [your password]
 ```
@@ -145,7 +145,7 @@ MySQL 默认存在的数据库有：
 
 ## 七、终端操作数据库
 
-在终端创建一个属于自己的新的数据库 `music_db`（一般情况下,一个新的项目，会对应一个新的数据库）。
+在终端创建一个属于自己的新的数据库 `music_db`（一般情况下，一个新的项目，会对应一个新的数据库）。
 
 ```mysql
 CREATE DATABASE music_db;
