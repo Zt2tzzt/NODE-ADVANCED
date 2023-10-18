@@ -173,6 +173,9 @@ CREATE TABLE user (
 INSERT INTO user (name, age, height) values ('zzt', 18, 1.88);
 
 INSERT INTO user (name, age, height) values ('kobe', 40, 1.98);
+
+# 预处理 + SET 的写法
+INSERT INTO user SET ?; # ? 处，传入 JS 对象，比如 {name: 'zzt', age: 18, height: 1.88}
 ```
 
 > MySQL 命令，只要不写分号，就可以换行。

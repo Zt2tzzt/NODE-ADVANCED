@@ -365,7 +365,7 @@ SELECT * FROM products WHERE brand = '华为' OR price < 5000;
 
 ```mysql
 SELECT * FROM products WHERE price >= 1000 && price <= 2000;
-SELECT * FROM products WHERE price BETWEEN 1000 AND 2000;
+SELECT * FROM products WHERE price BETWEEN 1000 AND 2000; # 包括 1000，不包括 2000
 ```
 
 枚举出多个结果，取其中之一。

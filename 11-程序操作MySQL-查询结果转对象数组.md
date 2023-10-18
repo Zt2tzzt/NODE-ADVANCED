@@ -112,7 +112,7 @@ LEFT JOIN courses cs
 GROUP BY stu.id;
 ```
 
-> 以上两种方式，虽然可以通过代码处理，但 MySQL 已提供了函数，更加方便。
+> 以上两种方式，使用 MySQL 提供的函数，非常方便。虽然也可以通过 JS 代码进行处理，但 没必要。
 
 ## 三、mysql2 是什么
 
@@ -215,7 +215,7 @@ connection.query(statement, (err, values, fields) => {
 
 2.使用 `connection.execute(statement, [[条件1], [条件2], ...])`
 
-3.销毁连接 `connection.destroy()`
+3.销毁连接 `connection.destroy()`。
 
 09-mySQL\03-mysql2-连接池.js
 
