@@ -440,11 +440,9 @@ module.exports = userRouter
 
 1.使用 `app.use(xxxRouter.routes())` 注册路由。
 
-在 Koa 中，任何没有匹配到的请求，默认都会返回“Not Found”，处理这种情况。
+2.在 Koa 中，任何没有匹配到的请求，默认都会返回“Not Found”，处理这种情况。
 
-2.使用 `app.use(router.allowedMethods()` 注册为中间件。
-
-`allowedMethods` 用于判断请求的 `method` 或 `path`，服务器是否做了处理：
+使用 `app.use(router.allowedMethods()` 注册为中间件。用于判断请求的 `method` 或 `path`，服务器是否做了处理：
 
 - 如果发送的请求，未匹配到 `method`，自动返回：“Method Not Allowed”，状态码：405；
 - 如果发送的请求，未匹配到 `path`，自动返回：“Not Implemented”，状态码：404；
