@@ -37,7 +37,7 @@ Cron是一种工具，它在 UNIX-like 操作系统中，定期运行指定的�
 0 17 * * 1-5
 ```
 
-## 一、定时任务
+## 二、定时任务
 
 下载 [node-schedule](https://github.com/node-schedule/node-schedule) 库。
 

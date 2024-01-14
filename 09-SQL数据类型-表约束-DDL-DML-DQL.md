@@ -216,10 +216,43 @@ CREATE TABLE IF NOT EXISTS `t_products`(
 
 ### 1.插入数据
 
+插入数据的标准写法：
+
 ```mysql
 INSERT INTO `t_products` (title, description, price, publishTime) VALUES ('iphone100', 'iphone100只要998', 998, '2122-10-10');
 INSERT INTO `t_products` (title, description, price, publishTime) VALUES ('小米99', '小米99只要998', 998, '2123-10-10');
 INSERT INTO `t_products` (title, description, price, publishTime) VALUES ('华为666', '华为666只要6666', 998, '2166-10-10');
+```
+
+在 mysql 中插入一条记录，如果该记录已存在，则更新这条记录
+
+```mysql
+INSERT INTO employees (employee_id, employee_name, employee_position) 
+VALUES (1, 'John Doe', 'Engineer')
+ON DUPLICATE KEY UPDATE 
+employee_name = VALUES(employee_name),
+employee_position = VALUES(employee_position);
+```
+
+用联合主键来判断该记录是否存在，已存在则更新这条记录
+
+```mysql
+INSERT INTO orders (order_id, product_id, quantity) 
+VALUES (1, 101, 5)
+ON DUPLICATE KEY UPDATE 
+quantity = VALUES(quantity);
+```
+
+在 mysql 中，使用 sql，插入一个 date 类型的值
+
+```mysql
+INSERT INTO example_table (date_column) VALUES ('2020-12-31');
+```
+
+同样，可以通过以下 SQL，用当前日期填充日期字段：
+
+```mysql
+INSERT INTO example_table (date_column) VALUES (CURDATE());
 ```
 
 ### 2.删除数据
@@ -250,11 +283,17 @@ UPDATE `t_products` SET price = 8888;
 UPDATE `t_products` SET price = 6666 WHERE id = 6;
 ```
 
-> 【补充】：修改某条数据时，将最新的修改时间，保存到 `updateTime` 字段上。
->
-> ```mysql
-> ALTER TABLE `t_products` ADD updateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
-> ```
+【补充】：修改某条数据时，将最新的修改时间，保存到 `updateTime` 字段上。
+
+```mysql
+ALTER TABLE `t_products` ADD updateTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+CREATE TABLE example (
+    id INT AUTO_INCREMENT PRIMARY KEY, 
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+```
 
 ## 五、DQL 语句
 
