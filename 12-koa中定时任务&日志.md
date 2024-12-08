@@ -1,6 +1,6 @@
 # koa中定时任务&日志
 
-## 一、cron-linke 语法
+## 一、cron-like 语法
 
 Cron是一种工具，它在 UNIX-like 操作系统中，定期运行指定的命令或脚本。
 
